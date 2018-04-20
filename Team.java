@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
@@ -9,6 +10,7 @@ public class Team {
 	private int score;
 	TextField textField;
 	Text text;
+	Button btn;
 	
 	public Team(String name, int score) {
 		this.name = name;
@@ -16,11 +18,17 @@ public class Team {
 		text = new Text(name);
 		textField = new TextField();
 		textField.setPrefColumnCount(10);
+		this.btn = new Button();
 	}
 	
-	public String getString() {
+	public String getName() {
 		
 		return this.name;
+	}
+	
+	public void setScore(int score) {
+		
+		this.score = score;
 	}
 	
 	public int getScore() {
