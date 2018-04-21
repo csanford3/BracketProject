@@ -64,36 +64,51 @@ public class Main extends Application {
 			//Alignment of window set to center
 			grid.setAlignment(Pos.CENTER);
 			grid.setMinSize(300, 300);
-			grid.setVgap(5);
-			grid.setHgap(5);
+			grid.setVgap(20);
+			grid.setHgap(20);
+			
+			Button submitBtn = new Button(); 
+			submitBtn.setText("Submit");
+			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+				
+				public void handle(ActionEvent event)  {
+					System.out.println("TBD");
+				}
+			});
 			
 			//LEFT-HAND SIDE OF BRACKET
 			
 			Team team1 = new Team("Team 1");
 			grid.add(team1.text, 0, 0);
 			grid.add(team1.textField, 1, 0);
+			grid.add(submitBtn, 2, 0);
 
 			Team team2 = new Team("Team 2");
-			grid.add(team2.text, 0, 2);
-			grid.add(team2.textField, 1, 2);
+			grid.add(team2.text, 0, 8);
+			grid.add(team2.textField, 1, 8);
+			
 			
 			Team teamA = new Team("Team A");
-			grid.add(teamA.text, 1, 1);
-			grid.add(teamA.textField,2, 1);
+			grid.add(teamA.text, 3, 4);
+			grid.add(teamA.textField, 4 , 4);
+			
 			
 			//RIGHT-HAND SIDE OF BRACKET
 			
 			Team team3 = new Team("Team 3");
-			grid.add(team3.text, 6, 0);
-			grid.add(team3.textField, 5, 0);
+			grid.add(team3.text, 12, 0);
+			grid.add(team3.textField, 11, 0);
+			
 
 			Team team4 = new Team("Team 4");
-			grid.add(team4.text, 6, 2);
-			grid.add(team4.textField, 5, 2);
+			grid.add(team4.text, 12, 8);
+			grid.add(team4.textField, 11, 8);
+			
 			
 			Team teamB = new Team("Team B");
-			grid.add(teamB.text, 5, 1);
-			grid.add(teamB.textField,4, 1);
+			grid.add(teamB.text, 8, 4);
+			grid.add(teamB.textField, 7, 4);
+			
 			
 			
 			grid.setStyle("-fx-background-color: #F8BFD1;");
