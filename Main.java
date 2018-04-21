@@ -61,51 +61,39 @@ public class Main extends Application {
 			//Padding sets space around edge of window
 			grid.setPadding(new Insets(10, 10, 10, 10));
 			
-			//Alignment of window set to the top and centered
-			grid.setAlignment(Pos.TOP_CENTER);
+			//Alignment of window set to center
+			grid.setAlignment(Pos.CENTER);
 			grid.setMinSize(300, 300);
 			grid.setVgap(5);
 			grid.setHgap(5);
+			
+			//LEFT-HAND SIDE OF BRACKET
+			
+			Team team1 = new Team("Team 1");
+			grid.add(team1.text, 0, 0);
+			grid.add(team1.textField, 1, 0);
 
-			Text team1 = new Text("Team 1");
-			grid.add(team1, 0, 0);
+			Team team2 = new Team("Team 2");
+			grid.add(team2.text, 0, 2);
+			grid.add(team2.textField, 1, 2);
+			
+			Team teamA = new Team("Team A");
+			grid.add(teamA.text, 1, 1);
+			grid.add(teamA.textField,2, 1);
+			
+			//RIGHT-HAND SIDE OF BRACKET
+			
+			Team team3 = new Team("Team 3");
+			grid.add(team3.text, 6, 0);
+			grid.add(team3.textField, 5, 0);
 
-			TextField text1 = new TextField();
-			text1.setPrefColumnCount(10);
-			text1.setPrefSize(5, 5);
-			grid.add(text1, 1, 0);
-
-			Text team2 = new Text("Team 2");
-			grid.add(team2, 0, 2);
-
-			TextField text2 = new TextField();
-			text2.setPrefColumnCount(10);
-			grid.add(text2, 1, 2);
-			
-			Text team3 = new Text("Team 3");
-			grid.add(team3, 6, 0);
-			
-			TextField text3 = new TextField();
-			text3.setPrefColumnCount(10);
-			grid.add(text3, 5, 0);
-			
-			
-			
-			Team team4 = new Team("Team 4 \n China");
-
-			
+			Team team4 = new Team("Team 4");
 			grid.add(team4.text, 6, 2);
-			
-			
-			team4.textField.setPrefColumnCount(10);
 			grid.add(team4.textField, 5, 2);
 			
-			
-			Team team5 = new Team("Team 5");
-			grid.add(team5.text, 5, 1);
-			
-			team5.textField.setPrefColumnCount(10);
-			grid.add(team5.textField,4, 1);
+			Team teamB = new Team("Team B");
+			grid.add(teamB.text, 5, 1);
+			grid.add(teamB.textField,4, 1);
 			
 			
 			grid.setStyle("-fx-background-color: #F8BFD1;");
