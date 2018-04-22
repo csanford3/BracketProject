@@ -12,9 +12,8 @@ public class Team {
 	Text text;
 	Button btn;
 	
-	public Team(String name, int score) {
+	public Team(String name) {
 		this.name = name;
-		this.score = score;
 		text = new Text(name);
 		textField = new TextField();
 		textField.setPrefColumnCount(10);
