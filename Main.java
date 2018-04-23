@@ -67,7 +67,7 @@ public class Main extends Application {
 			grid.setMinSize(300, 300);
 			grid.setHgap(20);
 			grid.setVgap(20);
-			grid.setGridLinesVisible(true);
+			//grid.setGridLinesVisible(true); // for debugging purposes
 			
 			Button submitBtn = new Button(); 
 			submitBtn.setText("Submit");
@@ -79,8 +79,8 @@ public class Main extends Application {
 			});
 			
 			Button submitBtn2 = new Button(); 
-			submitBtn.setText("Submit");
-			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+			submitBtn2.setText("Submit");
+			submitBtn2.setOnAction(new EventHandler<ActionEvent>() { 
 				
 				public void handle(ActionEvent event)  {
 					System.out.println("TBD");
@@ -88,8 +88,8 @@ public class Main extends Application {
 			});
 			
 			Button submitBtn3 = new Button(); 
-			submitBtn.setText("Submit");
-			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+			submitBtn3.setText("Submit");
+			submitBtn3.setOnAction(new EventHandler<ActionEvent>() { 
 				
 				public void handle(ActionEvent event)  {
 					System.out.println("TBD");
@@ -97,16 +97,16 @@ public class Main extends Application {
 			});
 			
 			Button submitBtn4 = new Button(); 
-			submitBtn.setText("Submit");
-			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+			submitBtn4.setText("Submit");
+			submitBtn4.setOnAction(new EventHandler<ActionEvent>() { 
 				
 				public void handle(ActionEvent event)  {
 					System.out.println("TBD");
 				}
 			});
 			Button submitBtn5 = new Button(); 
-			submitBtn.setText("Submit");
-			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+			submitBtn5.setText("Submit");
+			submitBtn5.setOnAction(new EventHandler<ActionEvent>() { 
 				
 				public void handle(ActionEvent event)  {
 					System.out.println("TBD");
@@ -114,8 +114,8 @@ public class Main extends Application {
 			});
 			
 			Button submitBtn6 = new Button(); 
-			submitBtn.setText("Submit");
-			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+			submitBtn6.setText("Submit");
+			submitBtn6.setOnAction(new EventHandler<ActionEvent>() { 
 				
 				public void handle(ActionEvent event)  {
 					System.out.println("TBD");
@@ -123,8 +123,8 @@ public class Main extends Application {
 			});
 			
 			Button submitBtn7 = new Button(); 
-			submitBtn.setText("Submit");
-			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+			submitBtn7.setText("Submit");
+			submitBtn7.setOnAction(new EventHandler<ActionEvent>() { 
 				
 				public void handle(ActionEvent event)  {
 					System.out.println("TBD");
@@ -149,7 +149,6 @@ public class Main extends Application {
 			VBox challenge1=new VBox();
 			challenge1.getChildren().addAll(hTeam1, hTeam8, submitBtn2);
 			grid.add(challenge1, 0, 0);
-			//grid.add(submitBtn2, 1, 0);
 			
 			
 			
@@ -170,7 +169,6 @@ public class Main extends Application {
 			VBox challenge2=new VBox();
 			challenge2.getChildren().addAll(hTeam2, hTeam7, submitBtn3);
 			grid.add(challenge2, 0, 2);
-			//grid.add(submitBtn3, 1, 3);
 			
 			
 			//winner of left side
@@ -180,9 +178,7 @@ public class Main extends Application {
 			teamX.textField.setPrefWidth(80);
 			VBox leftWinner = new VBox();
 			leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-			grid.add(leftWinner, 2, 1);
 			teamX.textField.setPromptText("Enter Score");
-			grid.add(submitBtn, 3, 1);
 			
 			
 			//RIGHT-HAND SIDE OF BRACKET
@@ -202,7 +198,7 @@ public class Main extends Application {
 			
 			VBox challenge3=new VBox();
 			challenge3.getChildren().addAll(hTeam3, hTeam6, submitBtn4);
-			grid.add(challenge3, 6, 0);
+			grid.add(challenge3, 4, 0);
 			
 			
 			//match up 4 v 5
@@ -220,7 +216,7 @@ public class Main extends Application {
 			
 			VBox challenge4=new VBox();
 			challenge4.getChildren().addAll(hTeam4, hTeam5, submitBtn5);
-			grid.add(challenge4, 6, 2);
+			grid.add(challenge4, 4, 2);
 			
 			
 			//winner of right side 
@@ -228,13 +224,15 @@ public class Main extends Application {
 			teamY.textField.setPrefWidth(80);
 			VBox rightWinner = new VBox();
 			rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-			//grid.add(teamY.text, 8, 2);
-			//grid.add(teamY.textField, 7, 2);
-			grid.add(rightWinner, 4, 1);
 			teamY.textField.setPromptText("Enter Score");
 			
+			//middle championship box
+			HBox championship = new HBox(); 
+			championship.getChildren().addAll(leftWinner, submitBtn, rightWinner);
+			grid.add(championship, 2, 1);
 			
-			//left intermediate match pup
+			
+			//left intermediate match up
 			Team teamA = new Team("Team A");
 			HBox hTeamA=new HBox();
 			teamA.textField.setPrefWidth(80);
@@ -267,7 +265,51 @@ public class Main extends Application {
 			
 			VBox challenge6=new VBox();
 			challenge6.getChildren().addAll(hTeamC, hTeamD, submitBtn7);
-			grid.add(challenge6, 5, 1);
+			grid.add(challenge6, 3, 1);
+			
+			
+			//champion and runner up areas - mostly lines 
+			VBox championArea = new VBox();
+			Line hLine = new Line();
+			Line vLine = new Line();
+			Text championText = new Text();
+			championText.setText("Champion: Team Name");
+			
+			
+			hLine.setStartX(0.0f);
+			hLine.setStartY(160.0f);
+			hLine.setEndX(160.0f);
+			hLine.setEndY(160.00f);
+			
+			vLine.setStartX(0.0f);
+			vLine.setStartY(0.0f);
+			vLine.setEndX(0.0);
+			vLine.setEndY(30.00f);
+			
+			championArea.getChildren().addAll(championText, hLine, vLine);
+			championArea.setAlignment(Pos.BOTTOM_CENTER);
+			grid.add(championArea, 2, 0);
+			
+			VBox secondArea = new VBox();
+			Line hLine2 = new Line();
+			Line vLine2 = new Line();
+			Text secondText = new Text();
+			secondText.setText("Runner-Up: Team Name");
+			
+			
+			hLine2.setStartX(0.0f);
+			hLine2.setStartY(160.0f);
+			hLine2.setEndX(160.0f);
+			hLine2.setEndY(160.00f);
+			
+			vLine2.setStartX(0.0f);
+			vLine2.setStartY(0.0f);
+			vLine2.setEndX(0.0);
+			vLine2.setEndY(30.00f);
+			
+			secondArea.getChildren().addAll(vLine2, hLine2, secondText);
+			secondArea.setAlignment(Pos.TOP_CENTER);
+			grid.add(secondArea, 2, 2);
 			
 			
 			grid.setStyle("-fx-background-color: #F8BFD1;");
