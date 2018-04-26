@@ -1,5 +1,7 @@
 package application;
-import com.sun.prism.paint.Color;
+	
+
+
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -18,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 
 public class Main extends Application {
@@ -31,30 +34,12 @@ public class Main extends Application {
 			
 			primaryStage.setTitle("Bracket Application");
 			
-			
-			
-			Button btn = new Button();
-			
-			btn.setText("Oh wow, I did a JavaFX!");
-			
-			btn.setOnAction(new EventHandler<ActionEvent>() {
-				
-				@Override
-				public void handle(ActionEvent event) {
-					System.out.println("Why do I have to put this print statement here");
-				}
-				
-			});
-			
-			//Stackpane for the banner
-			StackPane paneRoot = new StackPane();
-			paneRoot.getChildren().add(btn);
-			
+		
 			FlowPane flow = new FlowPane();
 			flow.setPadding(new Insets(10, 10, 10, 10));
 			flow.setStyle("-fx-background-color: AAE6F3;");
 			flow.setHgap(5);
-			flow.getChildren().add(btn);
+			
 			
 			//Gridpane shich allows flexibility
 			GridPane grid = new GridPane();
@@ -135,39 +120,60 @@ public class Main extends Application {
 			
 			//matchup 1 v 8
 			Team team1 = new Team("Team 1");
-			HBox hTeam1=new HBox();
-			team1.textField.setPrefWidth(80);
-			hTeam1.getChildren().addAll(team1.text, team1.textField);
-			team1.textField.setPromptText("Enter Score");
+			
 			
 			Team team8 = new Team("Team 8");
-			HBox hTeam8=new HBox();
-			team8.textField.setPrefWidth(80);
-			hTeam8.getChildren().addAll(team8.text, team8.textField);
-			team8.textField.setPromptText("Enter Score");
 			
-			VBox challenge1=new VBox();
-			challenge1.getChildren().addAll(hTeam1, hTeam8, submitBtn2);
+			
+			VBox team1n8 = new VBox();
+			Text lineField = new Text(" ");
+			team1n8.getChildren().addAll(team1.text, lineField, team8.text);
+
+			VBox teamSubmitBox = new VBox();
+			teamSubmitBox.getChildren().addAll(team1.textField, team8.textField, submitBtn2);
+			
+			HBox challenge1=new HBox();
+			challenge1.getChildren().addAll(team1n8, teamSubmitBox);
+			
+			
 			grid.add(challenge1, 0, 0);
 			
 			
 			
 			
 			//matchup 2 v 7
+//			Team team2 = new Team("Team 2");
+//			HBox hTeam2=new HBox();
+//			team2.textField.setPrefWidth(80);
+//			hTeam2.getChildren().addAll(team2.text, team2.textField);
+//			team2.textField.setPromptText("Enter Score");
+//			
+//			Team team7 = new Team("Team 7");
+//			HBox hTeam7=new HBox();
+//			team7.textField.setPrefWidth(80);
+//			hTeam7.getChildren().addAll(team7.text, team7.textField);
+//			team7.textField.setPromptText("Enter Score");
+//			
+//			VBox challenge2=new VBox();
+//			challenge2.getChildren().addAll(hTeam2, hTeam7, submitBtn3);
+			
 			Team team2 = new Team("Team 2");
-			HBox hTeam2=new HBox();
-			team2.textField.setPrefWidth(80);
-			hTeam2.getChildren().addAll(team2.text, team2.textField);
-			team2.textField.setPromptText("Enter Score");
+			
 			
 			Team team7 = new Team("Team 7");
-			HBox hTeam7=new HBox();
-			team7.textField.setPrefWidth(80);
-			hTeam7.getChildren().addAll(team7.text, team7.textField);
-			team7.textField.setPromptText("Enter Score");
 			
-			VBox challenge2=new VBox();
-			challenge2.getChildren().addAll(hTeam2, hTeam7, submitBtn3);
+			VBox team2n7 = new VBox();
+			Text lineField2 = new Text(" ");
+			team2n7.getChildren().addAll(team2.text, lineField2, team7.text);
+
+			VBox teamSubmitBox2 = new VBox();
+			teamSubmitBox2.getChildren().addAll(team2.textField, team7.textField, submitBtn3);
+			
+			HBox challenge2=new HBox();
+			challenge2.getChildren().addAll(team2n7, teamSubmitBox2);
+			
+			
+			
 			grid.add(challenge2, 0, 2);
 			
 			
@@ -186,15 +192,15 @@ public class Main extends Application {
 			//match up 3 v 6
 			Team team3 = new Team("Team 3");
 			HBox hTeam3=new HBox();
-			team3.textField.setPrefWidth(80);
+			
 			hTeam3.getChildren().addAll(team3.textField, team3.text);
-			team3.textField.setPromptText("Enter Score");
+			
 			
 			Team team6 = new Team("Team 6");
 			HBox hTeam6=new HBox();
-			team6.textField.setPrefWidth(80);
+			
 			hTeam6.getChildren().addAll(team6.textField, team6.text);
-			team6.textField.setPromptText("Enter Score");
+			
 			
 			VBox challenge3=new VBox();
 			challenge3.getChildren().addAll(hTeam3, hTeam6, submitBtn4);
@@ -204,15 +210,15 @@ public class Main extends Application {
 			//match up 4 v 5
 			Team team4 = new Team("Team 4");
 			HBox hTeam4=new HBox();
-			team4.textField.setPrefWidth(80);
+		
 			hTeam4.getChildren().addAll(team4.textField, team4.text);
-			team4.textField.setPromptText("Enter Score");
+			
 			
 			Team team5 = new Team("Team 5");
 			HBox hTeam5=new HBox();
-			team5.textField.setPrefWidth(80);
+			
 			hTeam5.getChildren().addAll(team5.textField, team5.text);
-			team5.textField.setPromptText("Enter Score");
+			
 			
 			VBox challenge4=new VBox();
 			challenge4.getChildren().addAll(hTeam4, hTeam5, submitBtn5);
@@ -221,10 +227,10 @@ public class Main extends Application {
 			
 			//winner of right side 
 			Team teamY = new Team("Team Y");
-			teamY.textField.setPrefWidth(80);
+			
 			VBox rightWinner = new VBox();
 			rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-			teamY.textField.setPromptText("Enter Score");
+			
 			
 			//middle championship box
 			HBox championship = new HBox(); 
@@ -233,35 +239,51 @@ public class Main extends Application {
 			
 			
 			//left intermediate match up
+//			Team teamA = new Team("Team A");
+//			HBox hTeamA=new HBox();
+//			teamA.textField.setPrefWidth(80);
+//			hTeamA.getChildren().addAll(teamA.text, teamA.textField);
+//			teamA.textField.setPromptText("Enter Score");
+//			
+//			Team teamB = new Team("Team B");
+//			HBox hTeamB=new HBox();
+//			teamB.textField.setPrefWidth(80);
+//			hTeamB.getChildren().addAll(teamB.text, teamB.textField);
+//			teamB.textField.setPromptText("Enter Score");
+//			
+//			VBox challenge5=new VBox();
+//			challenge5.getChildren().addAll(hTeamA, hTeamB, submitBtn6);
+			
 			Team teamA = new Team("Team A");
-			HBox hTeamA=new HBox();
-			teamA.textField.setPrefWidth(80);
-			hTeamA.getChildren().addAll(teamA.text, teamA.textField);
-			teamA.textField.setPromptText("Enter Score");
 			
-			Team teamB = new Team("Team B");
-			HBox hTeamB=new HBox();
-			teamB.textField.setPrefWidth(80);
-			hTeamB.getChildren().addAll(teamB.text, teamB.textField);
-			teamB.textField.setPromptText("Enter Score");
 			
-			VBox challenge5=new VBox();
-			challenge5.getChildren().addAll(hTeamA, hTeamB, submitBtn6);
+			Team teamB = new Team("Team 8");
+			
+			
+			VBox teamAnB = new VBox();
+			Text lineField5 = new Text(" ");
+			teamAnB.getChildren().addAll(teamA.text, lineField5, teamB.text);
+
+			VBox teamSubmitBox5 = new VBox();
+			teamSubmitBox5.getChildren().addAll(teamA.textField, teamB.textField, submitBtn6);
+			
+			HBox challenge5=new HBox();
+			challenge5.getChildren().addAll(teamAnB, teamSubmitBox5);
+			
+			
 			grid.add(challenge5, 1, 1);
 
 			
 			//right intermediate match up 
 			Team teamC = new Team("Team C");
 			HBox hTeamC=new HBox();
-			teamC.textField.setPrefWidth(80);
+			
 			hTeamC.getChildren().addAll(teamC.textField, teamC.text);
-			teamC.textField.setPromptText("Enter Score");
 			
 			Team teamD = new Team("Team D");
 			HBox hTeamD=new HBox();
-			teamD.textField.setPrefWidth(80);
+			
 			hTeamD.getChildren().addAll(teamD.textField, teamD.text);
-			teamD.textField.setPromptText("Enter Score");
 			
 			VBox challenge6=new VBox();
 			challenge6.getChildren().addAll(hTeamC, hTeamD, submitBtn7);
