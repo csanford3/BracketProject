@@ -17,6 +17,8 @@ public class Team {
 		text = new Text(name);
 		textField = new TextField();
 		textField.setPrefColumnCount(10);
+		textField.setPrefWidth(80);
+		textField.setPromptText("Enter Score");
 		this.btn = new Button();
 	}
 	
