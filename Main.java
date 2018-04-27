@@ -49,10 +49,10 @@ public class Main extends Application {
 			
 			//Alignment of window set to center
 			grid.setAlignment(Pos.CENTER);
-			grid.setMinSize(300, 300);
+			grid.setMinSize(500, 500);
 			grid.setHgap(20);
 			grid.setVgap(20);
-			//grid.setGridLinesVisible(true); // for debugging purposes
+			grid.setGridLinesVisible(true); // for debugging purposes
 			
 			Button submitBtn = new Button(); 
 			submitBtn.setText("Submit");
@@ -63,231 +63,131 @@ public class Main extends Application {
 				}
 			});
 			
-			Button submitBtn2 = new Button(); 
-			submitBtn2.setText("Submit");
-			submitBtn2.setOnAction(new EventHandler<ActionEvent>() { 
-				
-				public void handle(ActionEvent event)  {
-					System.out.println("TBD");
-				}
-			});
+			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS
+			/**
+			 * If the number of teams is 2^N then store those teams
+			 * in an array of size 2^(N-1), say teamArray[].
+			 * 
+			 * Next after the team names have been read into a String array
+			 * of the same size, say nameArray[], assuming that the teams
+			 * are given in some logical order, such as rank 1 to rank 16 then...
+			 * 
+			 * Loop through from k=0 to N, setting
+			 * 
+			 * teamArray[k] = new Team(nameArray[k]);
+			 * 
+			 * Now create an array of Challenges 
+			 * 
+			 * Next loop through again from k=0 to N/2, setting the challenges for the 
+			 * left hand side
+			 * 
+			 * for (int k=0, N/2, k++)
+			 *    challengeArray[k] = new Challenge(teamArray[k], teamArray[2^(N-1)-k], "left");
+			 *    
+			 *    grid.add(challenge1.challengeBox, 0, 2k);
+			 *    
+			 * Then loop from N/2 to N to finish the right hand side
+			 * 
+			 * for (int k=N/2, N, k++)
+			 * 		challengeArray[k] = new Challenge(teamArray[k], teamArray[2^(N-1)-k], "right");
+			 * 
+			 * 		grid.add(challenge1.challengeBox, 2^N, 2k);
+			 */
 			
-			Button submitBtn3 = new Button(); 
-			submitBtn3.setText("Submit");
-			submitBtn3.setOnAction(new EventHandler<ActionEvent>() { 
-				
-				public void handle(ActionEvent event)  {
-					System.out.println("TBD");
-				}
-			});
-			
-			Button submitBtn4 = new Button(); 
-			submitBtn4.setText("Submit");
-			submitBtn4.setOnAction(new EventHandler<ActionEvent>() { 
-				
-				public void handle(ActionEvent event)  {
-					System.out.println("TBD");
-				}
-			});
-			Button submitBtn5 = new Button(); 
-			submitBtn5.setText("Submit");
-			submitBtn5.setOnAction(new EventHandler<ActionEvent>() { 
-				
-				public void handle(ActionEvent event)  {
-					System.out.println("TBD");
-				}
-			});
-			
-			Button submitBtn6 = new Button(); 
-			submitBtn6.setText("Submit");
-			submitBtn6.setOnAction(new EventHandler<ActionEvent>() { 
-				
-				public void handle(ActionEvent event)  {
-					System.out.println("TBD");
-				}
-			});
-			
-			Button submitBtn7 = new Button(); 
-			submitBtn7.setText("Submit");
-			submitBtn7.setOnAction(new EventHandler<ActionEvent>() { 
-				
-				public void handle(ActionEvent event)  {
-					System.out.println("TBD");
-				}
-			});
+
+		
 			
 			//LEFT-HAND SIDE OF BRACKET
 			
 			//matchup 1 v 8
 			Team team1 = new Team("Team 1");
-			
-			
 			Team team8 = new Team("Team 8");
 			
+			Challenge challenge1 = new Challenge(team1, team8, "left");
 			
-			VBox team1n8 = new VBox();
-			Text lineField = new Text(" ");
-			team1n8.getChildren().addAll(team1.text, lineField, team8.text);
-
-			VBox teamSubmitBox = new VBox();
-			teamSubmitBox.getChildren().addAll(team1.textField, team8.textField, submitBtn2);
-			
-			HBox challenge1=new HBox();
-			challenge1.getChildren().addAll(team1n8, teamSubmitBox);
-			
-			
-			grid.add(challenge1, 0, 0);
+			grid.add(challenge1.challengeBox, 0, 0);
 			
 			
 			
 			
 			//matchup 2 v 7
-//			Team team2 = new Team("Team 2");
-//			HBox hTeam2=new HBox();
-//			team2.textField.setPrefWidth(80);
-//			hTeam2.getChildren().addAll(team2.text, team2.textField);
-//			team2.textField.setPromptText("Enter Score");
-//			
-//			Team team7 = new Team("Team 7");
-//			HBox hTeam7=new HBox();
-//			team7.textField.setPrefWidth(80);
-//			hTeam7.getChildren().addAll(team7.text, team7.textField);
-//			team7.textField.setPromptText("Enter Score");
-//			
-//			VBox challenge2=new VBox();
-//			challenge2.getChildren().addAll(hTeam2, hTeam7, submitBtn3);
 			
 			Team team2 = new Team("Team 2");
-			
-			
 			Team team7 = new Team("Team 7");
 			
-			VBox team2n7 = new VBox();
-			Text lineField2 = new Text(" ");
-			team2n7.getChildren().addAll(team2.text, lineField2, team7.text);
-
-			VBox teamSubmitBox2 = new VBox();
-			teamSubmitBox2.getChildren().addAll(team2.textField, team7.textField, submitBtn3);
+			Challenge challenge2 = new Challenge(team2, team7, "left");
 			
-			HBox challenge2=new HBox();
-			challenge2.getChildren().addAll(team2n7, teamSubmitBox2);
-			
-			
-			
-			grid.add(challenge2, 0, 2);
+			grid.add(challenge2.challengeBox, 0, 2);
 			
 			
 			//winner of left side
 			Team teamX = new Team("Team X");
-			//HBox hTeamX= new HBox();
-			//hTeamX.getChildren().addAll(teamX.text,teamX.textField);
-			teamX.textField.setPrefWidth(80);
+			
 			VBox leftWinner = new VBox();
 			leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-			teamX.textField.setPromptText("Enter Score");
+		
 			
 			
 			//RIGHT-HAND SIDE OF BRACKET
 			
 			//match up 3 v 6
 			Team team3 = new Team("Team 3");
-			HBox hTeam3=new HBox();
-			
-			hTeam3.getChildren().addAll(team3.textField, team3.text);
-			
-			
+
 			Team team6 = new Team("Team 6");
-			HBox hTeam6=new HBox();
 			
-			hTeam6.getChildren().addAll(team6.textField, team6.text);
+			Challenge challenge3 = new Challenge(team3, team6, "right");
 			
-			
-			VBox challenge3=new VBox();
-			challenge3.getChildren().addAll(hTeam3, hTeam6, submitBtn4);
-			grid.add(challenge3, 4, 0);
+			grid.add(challenge3.challengeBox, 4, 0);
 			
 			
 			//match up 4 v 5
 			Team team4 = new Team("Team 4");
-			HBox hTeam4=new HBox();
-		
-			hTeam4.getChildren().addAll(team4.textField, team4.text);
-			
-			
 			Team team5 = new Team("Team 5");
-			HBox hTeam5=new HBox();
 			
-			hTeam5.getChildren().addAll(team5.textField, team5.text);
-			
-			
-			VBox challenge4=new VBox();
-			challenge4.getChildren().addAll(hTeam4, hTeam5, submitBtn5);
-			grid.add(challenge4, 4, 2);
+			Challenge challenge4 = new Challenge(team4, team5, "right");
+
+			grid.add(challenge4.challengeBox, 4, 2);
 			
 			
 			//winner of right side 
-			Team teamY = new Team("Team Y");
+			Team teamY = new Team("\t    Team Y");
 			
 			VBox rightWinner = new VBox();
 			rightWinner.getChildren().addAll(teamY.text, teamY.textField);
 			
 			
 			//middle championship box
+			VBox submitBtnBox = new VBox();
+			submitBtnBox.getChildren().addAll(new Text(""), submitBtn);
 			HBox championship = new HBox(); 
-			championship.getChildren().addAll(leftWinner, submitBtn, rightWinner);
+			championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
 			grid.add(championship, 2, 1);
 			
-			
-			//left intermediate match up
-//			Team teamA = new Team("Team A");
-//			HBox hTeamA=new HBox();
-//			teamA.textField.setPrefWidth(80);
-//			hTeamA.getChildren().addAll(teamA.text, teamA.textField);
-//			teamA.textField.setPromptText("Enter Score");
-//			
-//			Team teamB = new Team("Team B");
-//			HBox hTeamB=new HBox();
-//			teamB.textField.setPrefWidth(80);
-//			hTeamB.getChildren().addAll(teamB.text, teamB.textField);
-//			teamB.textField.setPromptText("Enter Score");
-//			
-//			VBox challenge5=new VBox();
-//			challenge5.getChildren().addAll(hTeamA, hTeamB, submitBtn6);
+			//Left intermediate match up
+
+			//Team teamA = challenge1.computeWinner();
+			//Team teamB = challenge2.computeWinner();
 			
 			Team teamA = new Team("Team A");
+			Team teamB = new Team("Team B");
 			
-			
-			Team teamB = new Team("Team 8");
-			
-			
-			VBox teamAnB = new VBox();
-			Text lineField5 = new Text(" ");
-			teamAnB.getChildren().addAll(teamA.text, lineField5, teamB.text);
+			Challenge challenge5 = new Challenge(teamA, teamB, "left");
 
-			VBox teamSubmitBox5 = new VBox();
-			teamSubmitBox5.getChildren().addAll(teamA.textField, teamB.textField, submitBtn6);
-			
-			HBox challenge5=new HBox();
-			challenge5.getChildren().addAll(teamAnB, teamSubmitBox5);
-			
-			
-			grid.add(challenge5, 1, 1);
+			grid.add(challenge5.challengeBox, 1, 1);
 
+	
 			
 			//right intermediate match up 
+			//Team teamC = challenge3.computeWinner();
+			//Team teamD = challenge4.computeWinner();
+			
 			Team teamC = new Team("Team C");
-			HBox hTeamC=new HBox();
-			
-			hTeamC.getChildren().addAll(teamC.textField, teamC.text);
-			
 			Team teamD = new Team("Team D");
-			HBox hTeamD=new HBox();
 			
-			hTeamD.getChildren().addAll(teamD.textField, teamD.text);
 			
-			VBox challenge6=new VBox();
-			challenge6.getChildren().addAll(hTeamC, hTeamD, submitBtn7);
-			grid.add(challenge6, 3, 1);
+			Challenge challenge6 = new Challenge(teamC, teamD, "right");
+	
+			grid.add(challenge6.challengeBox, 3, 1);
 			
 			
 			//champion and runner up areas - mostly lines 
