@@ -82,14 +82,14 @@ public class Main extends Application {
 			 * left hand side
 			 * 
 			 * for (int k=0, N/2, k++)
-			 *    challengeArray[k] = new Challenge(teamArray[k], teamArray[2^(N-1)-k], "left");
+			 *    challengeArray[k] = new Challenge(teamArray[k], teamArray[2^N-1-k], "left");
 			 *    
 			 *    grid.add(challenge1.challengeBox, 0, 2k);
 			 *    
 			 * Then loop from N/2 to N to finish the right hand side
 			 * 
 			 * for (int k=N/2, N, k++)
-			 * 		challengeArray[k] = new Challenge(teamArray[k], teamArray[2^(N-1)-k], "right");
+			 * 		challengeArray[k] = new Challenge(teamArray[k], teamArray[2^N-1-k], "right");
 			 * 
 			 * 		grid.add(challenge1.challengeBox, 2^N, 2k);
 			 */
