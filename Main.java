@@ -66,7 +66,7 @@ public class Main extends Application {
 			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS
 			/**
 			 * If the number of teams is 2^N then store those teams
-			 * in an array of size 2^(N-1), say teamArray[].
+			 * in an array of size 2^N-1, say teamArray[].
 			 * 
 			 * Next after the team names have been read into a String array
 			 * of the same size, say nameArray[], assuming that the teams
