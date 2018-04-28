@@ -3,6 +3,8 @@ package application;
 
 
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -63,7 +65,7 @@ public class Main extends Application {
 				}
 			});
 			
-			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS
+			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS 
 			/**
 			 * If the number of teams is 2^N then store those teams
 			 * in an array of size 2^N-1, say teamArray[].
@@ -93,6 +95,104 @@ public class Main extends Application {
 			 * 
 			 * 		grid.add(challenge1.challengeBox, 2^N, 2k);
 			 */
+			
+			 
+			/**
+			 * Implemented some ideas from Chance's rough outline above^^. Needed to tweak a couple things, such as
+			 * the assignment of Challenges to the left side or right side of the bracket. When pairing Teams with index #
+			 * with their (numTeams - #) the distribution of left and right is not even. See the picture I sent 
+			 * on facebook. But since we only have up to 16 teams, this can be alleviated with a little bit of 
+			 * hard coding since it doesn't increase complexity. But by all means, if there is a better way, 
+			 * we can definitely implement that. I stopped short of implementing the submit button stuff into this mix, 
+			 * because it would probably be a good idea if you guys troubleshooted this part first. 
+			 */
+			
+			//TO-DO ->Grid system needs to be implemented to work with these data structures
+			
+			//read in files here to get number of teams 
+			
+			//not sure of number of teams -> so use arrayList
+			ArrayList<String> nameArray = new ArrayList<String>();
+			int numTeams = nameArray.size();
+		
+			//numRounds is intended to keep track of which layer(round) of the bracket we are working with
+			int numRounds = 0;
+			
+			//gets the number of rounds(aka the N in 2^N)
+			int roundTracker = numTeams/2;
+			while(roundTracker > 1) { 
+				numRounds += 1;
+			} 
+			
+			//populate initial array of Team Objects -> will populate challenge array after
+			Team[] teamArray = new Team[numTeams] ;
+			int i = 0;
+			for (String s : nameArray) { 
+				teamArray[i] = new Team(s);
+			}
+			
+			//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed. 
+			//the problem here is classifying the challenge as left or right -> see hard coded k's(viable option though)
+			Challenge[] challengeArray = new Challenge[numTeams/2];
+			for (int k = 0; k < numTeams/2; k ++) { 
+				if (k == 0 || k == 3 || k == 4 || k == 7) { 
+					challengeArray[k] = new Challenge(teamArray[k], teamArray[numTeams-1-k], "left");
+				}
+				else { 
+					challengeArray[k] = new Challenge(teamArray[k], teamArray[numTeams-1-k], "right");
+				}
+				
+				//teams cut in half when advancing a round
+				numRounds --;
+				numTeams = numTeams/2;
+			}
+			
+			
+			while (numRounds != 0)  { 
+				
+				//means there are 3 more rounds to populate
+				if (numRounds == 3) { 
+					Challenge[] updateChallengeArray = new Challenge[numTeams/2];
+					for (int k = 0; k < numTeams/2; k ++) { 
+						
+						if (k == 0 || k == 3) { 
+							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
+									challengeArray[numTeams-1-k].computeWinner(), "left");
+						}
+						
+						else { 
+							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
+									challengeArray[numTeams-1-k].computeWinner(), "right");
+						}
+					}
+				}
+				
+				//means two more rounds to be populated
+				else if (numRounds == 2) { 
+					Challenge[] updateChallengeArray = new Challenge[numTeams/2];
+					for (int k = 0; k < numTeams/2; k ++) { 
+						
+						//since there are only indexes 0 and 1 in challengeArray when there are two rounds left
+						if (k == 0) { 
+							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
+									challengeArray[numTeams-1-k].computeWinner(), "left");
+						}
+						
+						else { 
+							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
+									challengeArray[numTeams-1-k].computeWinner(), "right");
+						}
+					}
+				}
+				
+				//means there are two teams, and championship box has to be populated
+				else if (numRounds == 1) { 
+					//still have to implement
+				}
+				
+				numRounds --;
+				numTeams = numTeams/2;
+			}
 			
 
 		
