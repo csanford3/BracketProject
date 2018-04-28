@@ -65,7 +65,7 @@ public class Main extends Application {
 				}
 			});
 			
-			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS 
+			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS
 			/**
 			 * If the number of teams is 2^N then store those teams
 			 * in an array of size 2^N-1, say teamArray[].
@@ -96,7 +96,6 @@ public class Main extends Application {
 			 * 		grid.add(challenge1.challengeBox, 2^N, 2k);
 			 */
 			
-			 
 			/**
 			 * Implemented some ideas from Chance's rough outline above^^. Needed to tweak a couple things, such as
 			 * the assignment of Challenges to the left side or right side of the bracket. When pairing Teams with index #
@@ -193,8 +192,6 @@ public class Main extends Application {
 				numRounds --;
 				numTeams = numTeams/2;
 			}
-			
-
 		
 			
 			//LEFT-HAND SIDE OF BRACKET
@@ -218,6 +215,20 @@ public class Main extends Application {
 			Challenge challenge2 = new Challenge(team2, team7, "left");
 			
 			grid.add(challenge2.challengeBox, 0, 2);
+			
+			//Left intermediate match up
+			
+			//***Could not find a better way of doing this so for rounds 2,3,etc...
+			//a new challenge is created by computing the winner of the previous round's games
+			//and creating new Team objects with the same name as the previous game's winner.  These
+			//new Team objects are then used to create the next Challenge
+
+			Team teamA = new Team(challenge1.computeWinner().getName());
+			Team teamB = new Team(challenge2.computeWinner().getName());
+			
+			Challenge challenge5 = new Challenge(teamA, teamB, "left");
+
+			grid.add(challenge5.challengeBox, 1, 1);
 			
 			
 			//winner of left side
@@ -248,6 +259,22 @@ public class Main extends Application {
 
 			grid.add(challenge4.challengeBox, 4, 2);
 			
+			//right intermediate match up
+			
+			//***Could not find a better way of doing this so for rounds 2,3,etc...
+			//a new challenge is created by computing the winner of the previous round's games
+			//and creating new Team objects with the same name as the previous game's winner.  These
+			//new Team objects are then used to create the next Challenge
+
+			
+			Team teamC = new Team(challenge3.computeWinner().getName());
+			Team teamD = new Team(challenge4.computeWinner().getName());
+			
+			
+			Challenge challenge6 = new Challenge(teamC, teamD, "right");
+	
+			grid.add(challenge6.challengeBox, 3, 1);
+			
 			
 			//winner of right side 
 			Team teamY = new Team("\t    Team Y");
@@ -262,33 +289,6 @@ public class Main extends Application {
 			HBox championship = new HBox(); 
 			championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
 			grid.add(championship, 2, 1);
-			
-			//Left intermediate match up
-
-			//Team teamA = challenge1.computeWinner();
-			//Team teamB = challenge2.computeWinner();
-			
-			Team teamA = new Team("Team A");
-			Team teamB = new Team("Team B");
-			
-			Challenge challenge5 = new Challenge(teamA, teamB, "left");
-
-			grid.add(challenge5.challengeBox, 1, 1);
-
-	
-			
-			//right intermediate match up 
-			//Team teamC = challenge3.computeWinner();
-			//Team teamD = challenge4.computeWinner();
-			
-			Team teamC = new Team("Team C");
-			Team teamD = new Team("Team D");
-			
-			
-			Challenge challenge6 = new Challenge(teamC, teamD, "right");
-	
-			grid.add(challenge6.challengeBox, 3, 1);
-			
 			
 			//champion and runner up areas - mostly lines 
 			VBox championArea = new VBox();
