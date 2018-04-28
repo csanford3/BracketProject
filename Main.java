@@ -155,13 +155,15 @@ public class Main extends Application {
 					for (int k = 0; k < numTeams/2; k ++) { 
 						
 						if (k == 0 || k == 3) { 
-							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
-									challengeArray[numTeams-1-k].computeWinner(), "left");
+							updateChallengeArray[k] = new Challenge(
+									new Team(challengeArray[k].computeWinner().getName()), 
+									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "left");
 						}
 						
 						else { 
-							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
-									challengeArray[numTeams-1-k].computeWinner(), "right");
+							updateChallengeArray[k] = new Challenge(
+									new Team(challengeArray[k].computeWinner().getName()), 
+									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "right");
 						}
 					}
 				}
@@ -173,13 +175,15 @@ public class Main extends Application {
 						
 						//since there are only indexes 0 and 1 in challengeArray when there are two rounds left
 						if (k == 0) { 
-							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
-									challengeArray[numTeams-1-k].computeWinner(), "left");
+							updateChallengeArray[k] = new Challenge(
+									new Team(challengeArray[k].computeWinner().getName()), 
+									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "left");
 						}
 						
 						else { 
-							updateChallengeArray[k] = new Challenge(challengeArray[k].computeWinner(), 
-									challengeArray[numTeams-1-k].computeWinner(), "right");
+							updateChallengeArray[k] = new Challenge(
+									new Team(challengeArray[k].computeWinner().getName()), 
+									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "right");
 						}
 					}
 				}
@@ -187,6 +191,7 @@ public class Main extends Application {
 				//means there are two teams, and championship box has to be populated
 				else if (numRounds == 1) { 
 					//still have to implement
+					
 				}
 				
 				numRounds --;
