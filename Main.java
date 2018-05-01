@@ -65,46 +65,6 @@ public class Main extends Application {
 				}
 			});
 			
-			//FORMULA FIRST ROUND FOR ARBITRARY NUMBER OF TEAMS
-			/**
-			 * If the number of teams is 2^N then store those teams
-			 * in an array of size 2^N-1, say teamArray[].
-			 * 
-			 * Next after the team names have been read into a String array
-			 * of the same size, say nameArray[], assuming that the teams
-			 * are given in some logical order, such as rank 1 to rank 16 then...
-			 * 
-			 * Loop through from k=0 to N, setting
-			 * 
-			 * teamArray[k] = new Team(nameArray[k]);
-			 * 
-			 * Now create an array of Challenges 
-			 * 
-			 * Next loop through again from k=0 to N/2, setting the challenges for the 
-			 * left hand side
-			 * 
-			 * for (int k=0, N/2, k++)
-			 *    challengeArray[k] = new Challenge(teamArray[k], teamArray[2^N-1-k], "left");
-			 *    
-			 *    grid.add(challenge1.challengeBox, 0, 2k);
-			 *    
-			 * Then loop from N/2 to N to finish the right hand side
-			 * 
-			 * for (int k=N/2, N, k++)
-			 * 		challengeArray[k] = new Challenge(teamArray[k], teamArray[2^N-1-k], "right");
-			 * 
-			 * 		grid.add(challenge1.challengeBox, 2^N, 2k);
-			 */
-			
-			/**
-			 * Implemented some ideas from Chance's rough outline above^^. Needed to tweak a couple things, such as
-			 * the assignment of Challenges to the left side or right side of the bracket. When pairing Teams with index #
-			 * with their (numTeams - #) the distribution of left and right is not even. See the picture I sent 
-			 * on facebook. But since we only have up to 16 teams, this can be alleviated with a little bit of 
-			 * hard coding since it doesn't increase complexity. But by all means, if there is a better way, 
-			 * we can definitely implement that. I stopped short of implementing the submit button stuff into this mix, 
-			 * because it would probably be a good idea if you guys troubleshooted this part first. 
-			 */
 			
 			//TO-DO ->Grid system needs to be implemented to work with these data structures
 			
@@ -118,10 +78,7 @@ public class Main extends Application {
 			int numRounds = 0;
 			
 			//gets the number of rounds(aka the N in 2^N)
-			int roundTracker = numTeams/2;
-			while(roundTracker > 1) { 
-				numRounds += 1;
-			} 
+			numRounds = (int)(Math.log((double)numTeams)/Math.log(2)) - 1;
 			
 			//populate initial array of Team Objects -> will populate challenge array after
 			Team[] teamArray = new Team[numTeams] ;
@@ -130,8 +87,8 @@ public class Main extends Application {
 				teamArray[i] = new Team(s);
 			}
 			
+			//populates the outter instance of the bracket
 			//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed. 
-			//the problem here is classifying the challenge as left or right -> see hard coded k's(viable option though)
 			Challenge[] challengeArray = new Challenge[numTeams/2];
 			for (int k = 0; k < numTeams/2; k ++) { 
 				if (k == 0 || k == 3 || k == 4 || k == 7) { 
@@ -149,7 +106,7 @@ public class Main extends Application {
 			
 			while (numRounds != 0)  { 
 				
-				//means there are 3 more rounds to populate
+				//means there are three more rounds to populate
 				if (numRounds == 3) { 
 					Challenge[] updateChallengeArray = new Challenge[numTeams/2];
 					for (int k = 0; k < numTeams/2; k ++) { 
@@ -165,6 +122,7 @@ public class Main extends Application {
 									new Team(challengeArray[k].computeWinner().getName()), 
 									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "right");
 						}
+						challengeArray = updateChallengeArray;
 					}
 				}
 				
@@ -185,6 +143,7 @@ public class Main extends Application {
 									new Team(challengeArray[k].computeWinner().getName()), 
 									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "right");
 						}
+						challengeArray = updateChallengeArray;
 					}
 				}
 				
