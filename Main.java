@@ -91,7 +91,25 @@ public class Main extends Application {
 			
 			//not sure of number of teams -> so use arrayList
 			ArrayList<String> nameArray = new ArrayList<String>();
+			nameArray.add("1");
+			nameArray.add("2");
+			nameArray.add("3");
+			nameArray.add("4");
+			nameArray.add("5");
+			nameArray.add("6");
+			nameArray.add("7");
+			nameArray.add("8");
+			nameArray.add("9");
+			nameArray.add("10");
+			nameArray.add("11");
+			nameArray.add("12");
+			nameArray.add("13");
+			nameArray.add("14");
+			nameArray.add("15");
+			nameArray.add("16");
 			int numTeams = nameArray.size();
+			
+			
 		
 			//numRounds is intended to keep track of which layer(round) of the bracket we are working with
 			int numRounds = 0;
