@@ -1,10 +1,5 @@
 package application;
-	
-
-
-
 import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +20,33 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+////////////////////ALL ASSIGNMENTS INCLUDE THIS SECTION /////////////////////
+//
+//Title:           Main.java
+//Description:     This file provides the driver code for the tournament
+//				   bracket program with GUI.  This application allows
+//				   the user to input 2-16 teams and track each teams' 
+//				   progress throughout the tournament by updating a 
+//				   team's location in the bracket as the user enters
+//				   scores for the games.
+//
+//Files:           Main.java, Team.java, Challenge.java
+//
+//Course:          CS 400, Spring 2017
+//
+//Authors:          Chance Sanford, Mitchell Saulsberry, Anubhav Sanjeeva Prasad.
+//
+//
+//Email:           csanford4@wisc.edu, saulsberry@wisc.edu, sanjeevapras@wisc.edu
+//
+//
+//Lecturer's Name: Debra Deppler
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+//NONE
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
 public class Main extends Application {
 	
@@ -332,6 +354,7 @@ public class Main extends Application {
 					innerCounter = 0;
 					for(int j = 0; j < innerChallengesLeft.get(k).size() - 1; j+=2) { 
 						innerChallengesLeft.get(k).get(j).child = innerChallengesLeft.get(j+1).get(innerCounter);
+						innerChallengesLeft.get(k).get(j+1).child = innerChallengesLeft.get(j+1).get(innerCounter);
 						innerCounter += 1;
 					}
 				}
@@ -388,6 +411,7 @@ public class Main extends Application {
 					innerCounter = 0;
 					for(int j = 0; j < innerChallengesRight.get(k).size() - 1; j+=2) { 
 						innerChallengesRight.get(k).get(j).child = innerChallengesRight.get(j+1).get(innerCounter);
+						innerChallengesRight.get(k).get(j+1).child = innerChallengesRight.get(j+1).get(innerCounter);
 						innerCounter += 1;
 					}
 				}
@@ -469,150 +493,7 @@ public class Main extends Application {
 				grid.add(secondArea, numTeams/4 - 1 + w, numTeams/4);
 			}
 			
-//			grid.add(emptyArray[4].challengeBox, 1, 5);
-//			
-//			grid.add(emptyArray[6].challengeBox, 2, 3);
-//			
-//			//LEFT-HAND SIDE OF BRACKET
-//			
-//			//matchup 1 v 8
-//			Team team1 = new Team("Team 1");
-//			Team team8 = new Team("Team 8");
-//			
-//			Challenge challenge1 = new Challenge(team1, team8, "left");
-//			
-//			grid.add(challenge1.challengeBox, 0, 0);
-//			
-//			
-//			
-//			
-//			//matchup 2 v 7
-//			
-//			Team team2 = new Team("Team 2");
-//			Team team7 = new Team("Team 7");
-//			
-//			Challenge challenge2 = new Challenge(team2, team7, "left");
-//			
-//			grid.add(challenge2.challengeBox, 0, 2);
-//			
-//			//Left intermediate match up
-//			
-//			//***Could not find a better way of doing this so for rounds 2,3,etc...
-//			//a new challenge is created by computing the winner of the previous round's games
-//			//and creating new Team objects with the same name as the previous game's winner.  These
-//			//new Team objects are then used to create the next Challenge
-//
-//			Team teamA = new Team(challenge1.computeWinner().getName());
-//			Team teamB = new Team(challenge2.computeWinner().getName());
-//			
-//			Challenge challenge5 = new Challenge(teamA, teamB, "left");
-//
-//			grid.add(challenge5.challengeBox, 1, 1);
-//			
-//			
-//			//winner of left side
-//			Team teamX = new Team("Team X");
-//			
-//			VBox leftWinner = new VBox();
-//			leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-//		
-//			
-//			
-//			//RIGHT-HAND SIDE OF BRACKET
-//			
-//			//match up 3 v 6
-//			Team team3 = new Team("Team 3");
-//
-//			Team team6 = new Team("Team 6");
-//			
-//			Challenge challenge3 = new Challenge(team3, team6, "right");
-//			
-//			grid.add(challenge3.challengeBox, 4, 0);
-//			
-//			
-//			//match up 4 v 5
-//			Team team4 = new Team("Team 4");
-//			Team team5 = new Team("Team 5");
-//			
-//			Challenge challenge4 = new Challenge(team4, team5, "right");
-//
-//			grid.add(challenge4.challengeBox, 4, 2);
-//			
-//			//right intermediate match up
-//			
-//			//***Could not find a better way of doing this so for rounds 2,3,etc...
-//			//a new challenge is created by computing the winner of the previous round's games
-//			//and creating new Team objects with the same name as the previous game's winner.  These
-//			//new Team objects are then used to create the next Challenge
-//
-//			
-//			Team teamC = new Team(challenge3.computeWinner().getName());
-//			Team teamD = new Team(challenge4.computeWinner().getName());
-//			
-//			
-//			Challenge challenge6 = new Challenge(teamC, teamD, "right");
-//	
-//			grid.add(challenge6.challengeBox, 3, 1);
-//			
-//			
-//			//winner of right side 
-//			Team teamY = new Team("\t    Team Y");
-//			
-//			VBox rightWinner = new VBox();
-//			rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-//			
-//			
-//			//middle championship box
-//			VBox submitBtnBox = new VBox();
-//			submitBtnBox.getChildren().addAll(new Text(""), submitBtn);
-//			HBox championship = new HBox(); 
-//			championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
-//			grid.add(championship, 2, 1);
-//			
-//			//champion and runner up areas - mostly lines 
-//			VBox championArea = new VBox();
-//			Line hLine = new Line();
-//			Line vLine = new Line();
-//			Text championText = new Text();
-//			championText.setText("Champion: Team Name");
-//			
-//			
-//			hLine.setStartX(0.0f);
-//			hLine.setStartY(160.0f);
-//			hLine.setEndX(160.0f);
-//			hLine.setEndY(160.00f);
-//			
-//			vLine.setStartX(0.0f);
-//			vLine.setStartY(0.0f);
-//			vLine.setEndX(0.0);
-//			vLine.setEndY(30.00f);
-//			
-//			championArea.getChildren().addAll(championText, hLine, vLine);
-//			championArea.setAlignment(Pos.BOTTOM_CENTER);
-//			grid.add(championArea, 2, 0);
-//			
-//			VBox secondArea = new VBox();
-//			Line hLine2 = new Line();
-//			Line vLine2 = new Line();
-//			Text secondText = new Text();
-//			secondText.setText("Runner-Up: Team Name");
-//			
-//			
-//			hLine2.setStartX(0.0f);
-//			hLine2.setStartY(160.0f);
-//			hLine2.setEndX(160.0f);
-//			hLine2.setEndY(160.00f);
-//			
-//			vLine2.setStartX(0.0f);
-//			vLine2.setStartY(0.0f);
-//			vLine2.setEndX(0.0);
-//			vLine2.setEndY(30.00f);
-//			
-//			secondArea.getChildren().addAll(vLine2, hLine2, secondText);
-//			secondArea.setAlignment(Pos.TOP_CENTER);
-//			grid.add(secondArea, 2, 2);
-//			
-			
+
 			grid.setStyle("-fx-background-color: #F8BFD1;");
 			
 			
