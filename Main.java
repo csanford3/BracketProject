@@ -75,6 +75,47 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
+		Parameters param = getParameters();
+		List<String> list = param.getRaw();
+		
+		String filePath = list.get(0).trim();
+		
+		File inFile = new File( (new File(filePath)).getAbsolutePath());
+		
+		//File inFile = new File("src\\manifest.txt");
+
+		Scanner input = null;
+		try {
+			//use Scanner to read from the file, may throw FileNotFoundException
+			input = new Scanner( inFile);
+
+
+			BufferedReader br = new BufferedReader(new FileReader(inFile));
+
+			//while there are lines (place records) in the file.
+			String s;
+			while ((s = br.readLine()) != null) {
+				System.out.println("Reading Line");
+			}
+
+
+
+		}
+
+
+		catch (FileNotFoundException e) {
+			System.err.println("Error: File not found");
+			//		e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
+		finally {
+			//make sure and close the Scanner when done.
+			if ( input != null) input.close();
+		}
+		
 		try {
 			
 			
