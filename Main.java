@@ -27,6 +27,25 @@ import javafx.scene.text.TextAlignment;
 
 public class Main extends Application {
 
+	private ArrayList<Integer> initialSeeding(int numRounds) {
+		
+		ArrayList<Integer> indexArray = new ArrayList<Integer>();
+		indexArray.add(1);
+		indexArray.add(2);
+		for(int k = 0; k < numRounds - 1; k ++) {
+			ArrayList<Integer> out = new ArrayList<Integer>();
+			int length = indexArray.size()*2 +1;
+			for(Integer d: indexArray) {
+				out.add(d);
+				out.add(length - d);
+			}
+			
+			indexArray = out;
+		}
+		
+		return indexArray;
+		
+	}
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -78,85 +97,33 @@ public class Main extends Application {
 			int numRounds = 0;
 			
 			//gets the number of rounds(aka the N in 2^N)
-			numRounds = (int)(Math.log((double)numTeams)/Math.log(2)) - 1;
+			numRounds = (int)(Math.log((double)numTeams)/Math.log(2));
 			
 			//populate initial array of Team Objects -> will populate challenge array after
 			Team[] teamArray = new Team[numTeams] ;
 			int i = 0;
 			for (String s : nameArray) { 
 				teamArray[i] = new Team(s);
+				i ++;
 			}
+			 
+			Challenge[] challengeArray = new Challenge[numTeams/2];
+			ArrayList<Integer> indexArray = initialSeeding(numRounds);
 			
 			//populates the outter instance of the bracket
-			//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed. 
-			Challenge[] challengeArray = new Challenge[numTeams/2];
+			//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed.
+			int p = 0; //for iterating through indexArray
 			for (int k = 0; k < numTeams/2; k ++) { 
-				if (k == 0 || k == 3 || k == 4 || k == 7) { 
-					challengeArray[k] = new Challenge(teamArray[k], teamArray[numTeams-1-k], "left");
-				}
-				else { 
-					challengeArray[k] = new Challenge(teamArray[k], teamArray[numTeams-1-k], "right");
-				}
+				if (k < numTeams/4)
+				    challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "left");
+				else
+					challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "right");
+				p+= 2;
 				
-				//teams cut in half when advancing a round
+			/*	//teams cut in half when advancing a round
 				numRounds --;
-				numTeams = numTeams/2;
+				numTeams = numTeams/2; */
 			}
-			
-			
-			while (numRounds != 0)  { 
-				
-				//means there are three more rounds to populate
-				if (numRounds == 3) { 
-					Challenge[] updateChallengeArray = new Challenge[numTeams/2];
-					for (int k = 0; k < numTeams/2; k ++) { 
-						
-						if (k == 0 || k == 3) { 
-							updateChallengeArray[k] = new Challenge(
-									new Team(challengeArray[k].computeWinner().getName()), 
-									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "left");
-						}
-						
-						else { 
-							updateChallengeArray[k] = new Challenge(
-									new Team(challengeArray[k].computeWinner().getName()), 
-									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "right");
-						}
-						challengeArray = updateChallengeArray;
-					}
-				}
-				
-				//means two more rounds to be populated
-				else if (numRounds == 2) { 
-					Challenge[] updateChallengeArray = new Challenge[numTeams/2];
-					for (int k = 0; k < numTeams/2; k ++) { 
-						
-						//since there are only indexes 0 and 1 in challengeArray when there are two rounds left
-						if (k == 0) { 
-							updateChallengeArray[k] = new Challenge(
-									new Team(challengeArray[k].computeWinner().getName()), 
-									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "left");
-						}
-						
-						else { 
-							updateChallengeArray[k] = new Challenge(
-									new Team(challengeArray[k].computeWinner().getName()), 
-									new Team(challengeArray[numTeams-1-k].computeWinner().getName()), "right");
-						}
-						challengeArray = updateChallengeArray;
-					}
-				}
-				
-				//means there are two teams, and championship box has to be populated
-				else if (numRounds == 1) { 
-					//still have to implement
-					
-				}
-				
-				numRounds --;
-				numTeams = numTeams/2;
-			}
-		
 			
 			//LEFT-HAND SIDE OF BRACKET
 			
