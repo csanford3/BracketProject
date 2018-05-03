@@ -1,8 +1,11 @@
 package application;
 
+import org.omg.PortableServer.THREAD_POLICY_ID;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -15,28 +18,52 @@ public class Challenge {
 	Button submitBtn;
 	HBox challengeBox;
 	String side;
+	Challenge child = null;
+	boolean even;
 	
 	
-	public Challenge(Team team1, Team team2, String side) {
+	public Challenge(Team team1, Team team2, String side, boolean even) {
 		
 		
 		
 		this.team1 = team1;
 		this.team2 = team2;
 		this.side = side;
-		//TODO:
-		//***CHANGE THIS when a method to compute the winner is established***
-			winner = this.team1;
-		//***
+		this.even = even;
 		
 		submitBtn = new Button();
 		submitBtn.setText("Submit");
-		/*submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+		createChallengeBox();
+		submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
 			
 			public void handle(ActionEvent event)  {
-				System.out.println("TBD");
+			    
+				handleHelper();
+				
+
 			}
-		});*/
+		});
+	}
+	
+	private void handleHelper() { 
+		
+		team1.setScore();
+		team2.setScore();
+		int xcoord = GridPane.getColumnIndex(child.challengeBox);
+		int ycoord = GridPane.getRowIndex(child.challengeBox);
+		//child.challengeBox.getChildren().clear();
+		Main.grid.getChildren().remove(child.challengeBox);
+		if (even == true) { 
+			child.setTeam1(new Team(computeWinner().getName()));
+		}
+		else { 
+			child.setTeam2(new Team(computeWinner().getName()));
+		}
+		child.createChallengeBox();
+		Main.grid.add(child.challengeBox, xcoord, ycoord);
+	}
+	
+	private void createChallengeBox() { 
 		
 		VBox nameBox = new VBox();
 		Text lineField = new Text(" ");
@@ -59,7 +86,7 @@ public class Challenge {
 			challengeBox.getChildren().addAll(scoreSubmitBox, nameBox);
 			scoreSubmitBox.getChildren().addAll(team1.textField, team2.textField, submitBtn);
 		}
-		
+			
 	}
 	
 	public Team computeWinner() {

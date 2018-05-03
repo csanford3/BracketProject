@@ -27,6 +27,8 @@ import javafx.scene.text.TextAlignment;
 
 
 public class Main extends Application {
+	
+	public static GridPane grid = new GridPane();
 
 	private ArrayList<Integer> initialSeeding(int numRounds) {
 		
@@ -66,7 +68,7 @@ public class Main extends Application {
 			
 			
 			//Gridpane shich allows flexibility
-			GridPane grid = new GridPane();
+			
 			//Padding sets space around edge of window
 			grid.setPadding(new Insets(10, 10, 10, 10));
 			
@@ -97,18 +99,18 @@ public class Main extends Application {
 			nameArray.add("2");
 			nameArray.add("3");
 			nameArray.add("4");
-//			nameArray.add("5");
-//			nameArray.add("6");
-//			nameArray.add("7");
-//			nameArray.add("8");
-//			nameArray.add("9");
-//			nameArray.add("10");
-//			nameArray.add("11");
-//			nameArray.add("12");
-//			nameArray.add("13");
-//			nameArray.add("14");
-//			nameArray.add("15");
-//			nameArray.add("16");
+			nameArray.add("5");
+			nameArray.add("6");
+			nameArray.add("7");
+			nameArray.add("8");
+			nameArray.add("9");
+			nameArray.add("10");
+			nameArray.add("11");
+			nameArray.add("12");
+			nameArray.add("13");
+			nameArray.add("14");
+			nameArray.add("15");
+			nameArray.add("16");
 			int numTeams = nameArray.size();
 		
 			//numRounds is intended to keep track of which layer(round) of the bracket we are working with
@@ -132,10 +134,10 @@ public class Main extends Application {
 			//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed.
 			int p = 0; //for iterating through indexArray
 			for (int k = 0; k < numTeams/2; k ++) { 
-				if (k < numTeams/4)
-				    challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "left");
+				if (k < numTeams/4) 
+				    challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "left", k % 2 == 0);
 				else
-					challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "right");
+					challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "right", k % 2 == 0);
 				p+= 2;
 				
 			/*	//teams cut in half when advancing a round
@@ -209,15 +211,95 @@ public class Main extends Application {
 				grid.add(secondArea, 2, 2);
 			}
 			
+			if (numTeams == 4) { 
+				
+				grid.add(challengeArray[0].challengeBox, 0, 1);
+				grid.add(challengeArray[1].challengeBox, 2, 1);
+			
+				//winner of left side
+				Team teamX = new Team("");
+				
+				VBox leftWinner = new VBox();
+				leftWinner.getChildren().addAll(teamX.text, teamX.textField);
+				
+				//winner of right side 
+				Team teamY = new Team("");
+				
+				VBox rightWinner = new VBox();
+				rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+				
+				
+				//middle championship box
+				VBox submitBtnBox = new VBox();
+				submitBtnBox.getChildren().addAll(new Text(""), submitBtn);
+				HBox championship = new HBox(); 
+				championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
+				grid.add(championship, 1, 1);
+				
+				//champion and runner up areas - mostly lines 
+				VBox championArea = new VBox();
+				Line hLine = new Line();
+				Line vLine = new Line();
+				Text championText = new Text();
+				championText.setText("Champion: Team Name");
+				
+				
+				hLine.setStartX(0.0f);
+				hLine.setStartY(160.0f);
+				hLine.setEndX(160.0f);
+				hLine.setEndY(160.00f);
+				
+				vLine.setStartX(0.0f);
+				vLine.setStartY(0.0f);
+				vLine.setEndX(0.0);
+				vLine.setEndY(30.00f);
+				
+				championArea.getChildren().addAll(championText, hLine, vLine);
+				championArea.setAlignment(Pos.BOTTOM_CENTER);
+				grid.add(championArea, 1, 0);
+				
+				VBox secondArea = new VBox();
+				Line hLine2 = new Line();
+				Line vLine2 = new Line();
+				Text secondText = new Text();
+				secondText.setText("Runner-Up: Team Name");
+				
+				
+				hLine2.setStartX(0.0f);
+				hLine2.setStartY(160.0f);
+				hLine2.setEndX(160.0f);
+				hLine2.setEndY(160.00f);
+				
+				vLine2.setStartX(0.0f);
+				vLine2.setStartY(0.0f);
+				vLine2.setEndX(0.0);
+				vLine2.setEndY(30.00f);
+				
+				secondArea.getChildren().addAll(vLine2, hLine2, secondText);
+				secondArea.setAlignment(Pos.TOP_CENTER);
+				grid.add(secondArea, 1, 2);
+			
+			
+			
+			
+			
+			}
+			
 			
 			else {
+				ArrayList<ArrayList<Challenge>> innerChallengesLeft = new ArrayList<ArrayList<Challenge>>();
 				
-
 				//Left Hand Side of Grid
 				Challenge[] leftEmpty = new Challenge[9];
 
 				for (int g = 0; g < 9; g++) {
-					leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left");
+					if (g % 2 == 0) { 
+						leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left", true);
+					}
+					else { 
+						leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left", false);
+					}
+					
 				}
 				
 				
@@ -227,39 +309,87 @@ public class Main extends Application {
 				}
 				int inc = 0;
 				for (int j = 0; j < numTeams/8; j++) {
-
+						
+					ArrayList<Challenge> inner = new ArrayList<Challenge>();
 					for(int k = 0; k < numTeams/8-j; k++) {
 						grid.add(leftEmpty[inc].challengeBox, j+1, 4*k + (2*j+1));
+						inner.add(leftEmpty[inc]);
 						inc++;
 					}
+					innerChallengesLeft.add(inner);
 
 				}
-
+				
+				int innerCounter = 0;
+				for (int k = 0; k < challengeArray.length/2; k+=2) { 
+					challengeArray[k].child = innerChallengesLeft.get(0).get(innerCounter);
+					challengeArray[k + 1].child = innerChallengesLeft.get(0).get(innerCounter);
+					innerCounter += 1;
+				}
+				
+				
+				for (int k = 0; k < innerChallengesLeft.size(); k++) { 
+					innerCounter = 0;
+					for(int j = 0; j < innerChallengesLeft.get(k).size() - 1; j+=2) { 
+						innerChallengesLeft.get(k).get(j).child = innerChallengesLeft.get(j+1).get(innerCounter);
+						innerCounter += 1;
+					}
+				}
+				
+				
+				
+				
+				ArrayList<ArrayList<Challenge>> innerChallengesRight = new ArrayList<ArrayList<Challenge>>();
 				
 				Challenge[] rightEmpty = new Challenge[9];
 
 				for (int g = 0; g < 9; g++) {
-					rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right");
+					if (g % 2 == 0) { 
+						rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right", false);
+					}
+					else { 
+						rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right", true);
+					}
+					
 				}
 
 
 				//Right Hand Side of Grid
+				int z = 2; 
+				if (numTeams == 8) { 
+					z = 0;
+				}
 
 				for(int j = numTeams/4; j < numTeams/2; j++) {
-					grid.add(challengeArray[j].challengeBox, numTeams/2 - 2, 2*j-2*numTeams/4);		
+					grid.add(challengeArray[j].challengeBox, numTeams/2 - z, 2*j-2*numTeams/4);		
 				}
 				int inc2 = 0;
 				for (int j = 0; j < numTeams/8; j++) {
-
+					
+					ArrayList<Challenge> inner = new ArrayList<Challenge>();
 					for(int k = 0; k < numTeams/8-j; k++) {
 						System.out.println("(" +  (numTeams/4+1-j) + "," +  (4*k + (2*j+1)) + ")");
-
 						grid.add(rightEmpty[numTeams/8 + inc2 + 1].challengeBox, numTeams/4+1-j, 4*k + (2*j+1));
+						inner.add(rightEmpty[numTeams/8 + inc2 + 1]);
 						inc2++;
-
-
 					}
+					innerChallengesRight.add(inner);
 
+				}
+				
+				innerCounter = 0;
+				for (int k = challengeArray.length/2; k < challengeArray.length; k+=2) { 
+					challengeArray[k].child = innerChallengesRight.get(0).get(innerCounter);
+					challengeArray[k + 1].child = innerChallengesRight.get(0).get(innerCounter);
+					innerCounter += 1;
+				}
+				
+				for (int k = 0; k < innerChallengesRight.size(); k ++) { 
+					innerCounter = 0;
+					for(int j = 0; j < innerChallengesRight.get(k).size() - 1; j+=2) { 
+						innerChallengesRight.get(k).get(j).child = innerChallengesRight.get(j+1).get(innerCounter);
+						innerCounter += 1;
+					}
 				}
 
 				//winner of left side
@@ -328,10 +458,15 @@ public class Main extends Application {
 				VBox centerBox = new VBox();
 				centerBox.getChildren().addAll(championship);
 				
+				int w = 0; 
+				if(numTeams == 8) { 
+					w = 1;
+				}
 				
-				grid.add(centerBox, numTeams/4 - 1, numTeams/4 -1);
-				grid.add(championArea, numTeams/4 - 1, numTeams/4 - 2);
-				grid.add(secondArea, numTeams/4 - 1, numTeams/4);
+				
+				grid.add(centerBox, numTeams/4 - 1 + w, numTeams/4 -1);
+				grid.add(championArea, numTeams/4 - 1 + w, numTeams/4 - 2);
+				grid.add(secondArea, numTeams/4 - 1 + w, numTeams/4);
 			}
 			
 //			grid.add(emptyArray[4].challengeBox, 1, 5);
