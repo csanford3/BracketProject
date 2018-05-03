@@ -50,7 +50,7 @@ public class Challenge {
 		challengeBox = new HBox();
 		
 		if (side.trim().toLowerCase().equals("left")) {
-			spaceSubmitBox.getChildren().addAll(new Text("	"), submitBtn);
+			spaceSubmitBox.getChildren().addAll(new Text("			"), submitBtn);
 			scoreSubmitBox.getChildren().addAll(team1.textField, team2.textField, spaceSubmitBox);
 			challengeBox.getChildren().addAll(nameBox, scoreSubmitBox);
 		}
