@@ -101,6 +101,7 @@ public class Main extends Application {
 			grid.setVgap(20);
 			grid.setGridLinesVisible(true); // for debugging purposes
 			
+			//need to delete this
 			Button submitBtn = new Button(); 
 			submitBtn.setText("Submit");
 			submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
@@ -111,8 +112,6 @@ public class Main extends Application {
 			});
 			
 			
-			//TO-DO ->Grid system needs to be implemented to work with these data structures
-			
 			//read in files here to get number of teams 
 			
 			//not sure of number of teams -> so use arrayList
@@ -121,18 +120,18 @@ public class Main extends Application {
 			nameArray.add("2");
 			nameArray.add("3");
 			nameArray.add("4");
-			nameArray.add("5");
-			nameArray.add("6");
-			nameArray.add("7");
-			nameArray.add("8");
-			nameArray.add("9");
-			nameArray.add("10");
-			nameArray.add("11");
-			nameArray.add("12");
-			nameArray.add("13");
-			nameArray.add("14");
-			nameArray.add("15");
-			nameArray.add("16");
+//			nameArray.add("5");
+//			nameArray.add("6");
+//			nameArray.add("7");
+//			nameArray.add("8");
+//			nameArray.add("9");
+//			nameArray.add("10");
+//			nameArray.add("11");
+//			nameArray.add("12");
+//			nameArray.add("13");
+//			nameArray.add("14");
+//			nameArray.add("15");
+//			nameArray.add("16");
 			int numTeams = nameArray.size();
 		
 			//numRounds is intended to keep track of which layer(round) of the bracket we are working with
@@ -169,6 +168,9 @@ public class Main extends Application {
 			
 			if (numTeams == 2) {
 				
+				Button submitBtn1 = new Button(); 
+				submitBtn1.setText("Submit");
+				
 				//winner of left side
 				Team teamX = new Team(challengeArray[0].getTeam1().getName());
 				
@@ -184,7 +186,7 @@ public class Main extends Application {
 				
 				//middle championship box
 				VBox submitBtnBox = new VBox();
-				submitBtnBox.getChildren().addAll(new Text(""), submitBtn);
+				submitBtnBox.getChildren().addAll(new Text(""), submitBtn1);
 				HBox championship = new HBox(); 
 				championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
 				grid.add(championship, 2, 1);
@@ -231,9 +233,28 @@ public class Main extends Application {
 				secondArea.getChildren().addAll(vLine2, hLine2, secondText);
 				secondArea.setAlignment(Pos.TOP_CENTER);
 				grid.add(secondArea, 2, 2);
+				
+				submitBtn1.setOnAction(new EventHandler<ActionEvent>() { 
+									
+						public void handle(ActionEvent event)  {
+							if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
+								championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
+								secondText.setText("Runner Up: " + challengeArray[0].getTeam2().getName());
+							}
+							else { 
+								championText.setText("Champion: " + challengeArray[0].getTeam2().getName());
+								secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
+							}
+						}
+				});
 			}
 			
-			if (numTeams == 4) { 
+			
+			else if (numTeams == 4) { 
+				
+				Button submitBtn2 = new Button(); 
+				submitBtn2.setText("Submit");
+				
 				
 				grid.add(challengeArray[0].challengeBox, 0, 1);
 				grid.add(challengeArray[1].challengeBox, 2, 1);
@@ -253,7 +274,7 @@ public class Main extends Application {
 				
 				//middle championship box
 				VBox submitBtnBox = new VBox();
-				submitBtnBox.getChildren().addAll(new Text(""), submitBtn);
+				submitBtnBox.getChildren().addAll(new Text(""), submitBtn2);
 				HBox championship = new HBox(); 
 				championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
 				grid.add(championship, 1, 1);
@@ -301,8 +322,20 @@ public class Main extends Application {
 				secondArea.setAlignment(Pos.TOP_CENTER);
 				grid.add(secondArea, 1, 2);
 			
-			
-			
+				
+				submitBtn2.setOnAction(new EventHandler<ActionEvent>() { 
+					
+					public void handle(ActionEvent event)  {
+						if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
+							championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
+							secondText.setText("Runner Up: " + challengeArray[0].getTeam2().getName());
+						}
+						else { 
+							championText.setText("Champion: " + challengeArray[0].getTeam2().getName());
+							secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
+						}
+					}
+				});	
 			
 			
 			}
