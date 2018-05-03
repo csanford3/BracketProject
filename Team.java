@@ -1,5 +1,6 @@
 package application;
 
+import com.sun.prism.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -17,19 +18,15 @@ public class Team {
 		text = new Text(name);
 		textField = new TextField();
 		textField.setPrefColumnCount(10);
-		textField.setPrefWidth(80);
-		textField.setPromptText("Enter Score");
 		this.btn = new Button();
 	}
 	
 	public String getName() {
-		
 		return this.name;
 	}
 	
-	public void setScore(int score) {
-		
-		this.score = score;
+	public void setScore() {
+		this.score = Integer.parseInt(textField.getText());
 	}
 	
 	public int getScore() {
