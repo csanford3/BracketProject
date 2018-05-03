@@ -82,15 +82,18 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
+		//not sure of number of teams -> so use arrayList
+		ArrayList<String> nameArray = new ArrayList<String>();
+		
 		Parameters param = getParameters();
 		List<String> list = param.getRaw();
 		
 		String filePath = list.get(0).trim();
 		
-		File inFile = new File( (new File(filePath)).getAbsolutePath());
 		
-		//File inFile = new File("src\\manifest.txt");
-
+		
+		File inFile = new File( "src"+File.separator + filePath);
+		
 		Scanner input = null;
 		try {
 			//use Scanner to read from the file, may throw FileNotFoundException
@@ -99,13 +102,16 @@ public class Main extends Application {
 
 			BufferedReader br = new BufferedReader(new FileReader(inFile));
 
-			//while there are lines (place records) in the file.
+			//while there are lines  in the file.
 			String s;
-			while ((s = br.readLine()) != null) {
-				System.out.println("Reading Line");
+			while ((s = br.readLine()) != null && !s.trim().equals("")) {
+				nameArray.add(s);
+				
+				
+				
 			}
 
-
+			
 
 		}
 
@@ -128,7 +134,7 @@ public class Main extends Application {
 			
 			primaryStage.setTitle("Bracket Application");
 			
-			ScrollPane scroll= new ScrollPane();
+			
 			
 		
 			FlowPane flow = new FlowPane();
@@ -147,7 +153,7 @@ public class Main extends Application {
 			grid.setMinSize(500, 500);
 			grid.setHgap(20);
 			grid.setVgap(20);
-			grid.setGridLinesVisible(true); // for debugging purposes
+			//grid.setGridLinesVisible(true); // for debugging purposes
 			
 			//need to delete this
 			Button submitBtn = new Button(); 
@@ -159,27 +165,7 @@ public class Main extends Application {
 				}
 			});
 			
-			
-			//read in files here to get number of teams 
-			
-			//not sure of number of teams -> so use arrayList
-			ArrayList<String> nameArray = new ArrayList<String>();
-			nameArray.add("1");
-			nameArray.add("2");
-			nameArray.add("3");
-			nameArray.add("4");
-//			nameArray.add("5");
-//			nameArray.add("6");
-//			nameArray.add("7");
-//			nameArray.add("8");
-//			nameArray.add("9");
-//			nameArray.add("10");
-//			nameArray.add("11");
-//			nameArray.add("12");
-//			nameArray.add("13");
-//			nameArray.add("14");
-//			nameArray.add("15");
-//			nameArray.add("16");
+
 			int numTeams = nameArray.size();
 		
 			//numRounds is intended to keep track of which layer(round) of the bracket we are working with
@@ -472,7 +458,7 @@ public class Main extends Application {
 					
 					ArrayList<Challenge> inner = new ArrayList<Challenge>();
 					for(int k = 0; k < numTeams/8-j; k++) {
-						System.out.println("(" +  (numTeams/4+1-j) + "," +  (4*k + (2*j+1)) + ")");
+						
 						grid.add(rightEmpty[numTeams/8 + inc2 + 1].challengeBox, numTeams/4+1-j, 4*k + (2*j+1));
 						inner.add(rightEmpty[numTeams/8 + inc2 + 1]);
 						inc2++;
