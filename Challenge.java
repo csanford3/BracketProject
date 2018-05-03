@@ -14,6 +14,7 @@ public class Challenge {
 	private Team winner = null;
 	Button submitBtn;
 	HBox challengeBox;
+	String side;
 	
 	
 	public Challenge(Team team1, Team team2, String side) {
@@ -22,7 +23,7 @@ public class Challenge {
 		
 		this.team1 = team1;
 		this.team2 = team2;
-		
+		this.side = side;
 		//TODO:
 		//***CHANGE THIS when a method to compute the winner is established***
 			winner = this.team1;
@@ -30,12 +31,12 @@ public class Challenge {
 		
 		submitBtn = new Button();
 		submitBtn.setText("Submit");
-		submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
+		/*submitBtn.setOnAction(new EventHandler<ActionEvent>() { 
 			
 			public void handle(ActionEvent event)  {
 				System.out.println("TBD");
 			}
-		});
+		});*/
 		
 		VBox nameBox = new VBox();
 		Text lineField = new Text(" ");
@@ -63,7 +64,9 @@ public class Challenge {
 	
 	public Team computeWinner() {
 		
-		
+		winner = team1;
+		if (team1.getScore() < team2.getScore())
+			winner = team2;
 		//returns winner
 		return this.winner;
 	}
@@ -76,6 +79,16 @@ public class Challenge {
 	public Team getTeam2() {
 		
 		return this.team2;
+	}
+	
+    public void setTeam1(Team team1) {
+		
+		this.team1 = team1;
+	}
+    
+    public void setTeam2(Team team2) {
+		
+		this.team2 = team2;
 	}
 
 }
