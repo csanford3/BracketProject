@@ -90,52 +90,59 @@ public class Main extends Application {
 		
 		String filePath = list.get(0).trim();
 		
-		
+		Boolean empty = true;
 		
 		File inFile = new File( "src"+File.separator + filePath);
 		
-		Scanner input = null;
-		try {
-			//use Scanner to read from the file, may throw FileNotFoundException
-			input = new Scanner( inFile);
+		if (inFile.length() != 0) {
+			
+			empty = false;
+		
+		
+			Scanner input = null;
+			try {
+				//use Scanner to read from the file, may throw FileNotFoundException
+				input = new Scanner( inFile);
 
 
-			BufferedReader br = new BufferedReader(new FileReader(inFile));
 
-			//while there are lines  in the file.
-			String s;
-			while ((s = br.readLine()) != null && !s.trim().equals("")) {
-				nameArray.add(s);
-				
-				
-				
+				BufferedReader br = new BufferedReader(new FileReader(inFile));
+
+				//while there are lines  in the file.
+				String s;
+				while ((s = br.readLine()) != null && !s.trim().equals("")) {
+					nameArray.add(s);
+
+
+
+				}
+
+
+
 			}
 
-			
 
-		}
+			catch (FileNotFoundException e) {
+				System.err.println("Error: File not found");
+				//		e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 
-
-		catch (FileNotFoundException e) {
-			System.err.println("Error: File not found");
-			//		e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-
-		finally {
-			//make sure and close the Scanner when done.
-			if ( input != null) input.close();
-		}
+			finally {
+				//make sure and close the Scanner when done.
+				if ( input != null) input.close();
+			}
 		
+		}
 		
 		try {
 			
 			
 			primaryStage.setTitle("Bracket Application");
 			
-			ScrollPane scroll= new ScrollPane();
+			
 			
 		
 			FlowPane flow = new FlowPane();
@@ -154,7 +161,7 @@ public class Main extends Application {
 			grid.setMinSize(500, 500);
 			grid.setHgap(20);
 			grid.setVgap(20);
-			grid.setGridLinesVisible(true); // for debugging purposes
+			//grid.setGridLinesVisible(true); // for debugging purposes
 			
 			//need to delete this
 			Button submitBtn = new Button(); 
@@ -168,108 +175,121 @@ public class Main extends Application {
 			
 			int numTeams = nameArray.size();
 		
-			//numRounds is intended to keep track of which layer(round) of the bracket we are working with
-			int numRounds = 0;
-			
-			//gets the number of rounds(aka the N in 2^N)
-			numRounds = (int)(Math.log((double)numTeams)/Math.log(2));
-			
-			//populate initial array of Team Objects -> will populate challenge array after
-			Team[] teamArray = new Team[numTeams] ;
-			int i = 0;
-			for (String s : nameArray) { 
-				teamArray[i] = new Team(s);
-				i ++;
-			}
-			 
-			Challenge[] challengeArray = new Challenge[numTeams/2];
-			ArrayList<Integer> indexArray = initialSeeding(numRounds);
-			
-			//populates the outter instance of the bracket
-			//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed.
-			int p = 0; //for iterating through indexArray
-			for (int k = 0; k < numTeams/2; k ++) { 
-				if (k < numTeams/4) 
-				    challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "left", k % 2 == 0);
-				else
-					challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "right", k % 2 == 0);
-				p+= 2;
+			if (numTeams == 1) {
 				
-			/*	//teams cut in half when advancing a round
-				numRounds --;
-				numTeams = numTeams/2; */
+				Text champText = new Text();
+				champText.setText("Champion: " + nameArray.get(0));
+				grid.add(champText, 0, 0);
 			}
 			
-			if (numTeams == 2) {
-				
-				Button submitBtn1 = new Button(); 
-				submitBtn1.setText("Submit");
-				
-				//winner of left side
-				Team teamX = new Team(challengeArray[0].getTeam1().getName());
-				
-				VBox leftWinner = new VBox();
-				leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-				
-				//winner of right side 
-				Team teamY = new Team(challengeArray[0].getTeam2().getName());
-				
-				VBox rightWinner = new VBox();
-				rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+			System.out.println(empty);
+			
+			if (numTeams > 1) {
+			
 				
 				
-				//middle championship box
-				VBox submitBtnBox = new VBox();
-				submitBtnBox.getChildren().addAll(new Text(""), submitBtn1);
-				HBox championship = new HBox(); 
-				championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
-				grid.add(championship, 2, 1);
+				//numRounds is intended to keep track of which layer(round) of the bracket we are working with
+				int numRounds = 0;
 				
-				//champion and runner up areas - mostly lines 
-				VBox championArea = new VBox();
-				Line hLine = new Line();
-				Line vLine = new Line();
-				Text championText = new Text();
-				championText.setText("Champion: Team Name");
+				//gets the number of rounds(aka the N in 2^N)
+				numRounds = (int)(Math.log((double)numTeams)/Math.log(2));
 				
+				//populate initial array of Team Objects -> will populate challenge array after
+				Team[] teamArray = new Team[numTeams] ;
+				int i = 0;
+				for (String s : nameArray) { 
+					teamArray[i] = new Team(s);
+					i ++;
+				}
+				 
+				Challenge[] challengeArray = new Challenge[numTeams/2];
+				ArrayList<Integer> indexArray = initialSeeding(numRounds);
 				
-				hLine.setStartX(0.0f);
-				hLine.setStartY(160.0f);
-				hLine.setEndX(160.0f);
-				hLine.setEndY(160.00f);
+				//populates the outer instance of the bracket
+				//only need to iterate until numTeams/2 because each lower seed(ie 1-8) is matched up with higher seed.
+				int p = 0; //for iterating through indexArray
+				for (int k = 0; k < numTeams/2; k ++) { 
+					if (k < numTeams/4) 
+					    challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "left", k % 2 == 0);
+					else
+						challengeArray[k] = new Challenge(teamArray[indexArray.get(p)-1], teamArray[indexArray.get(p+1)-1], "right", k % 2 == 0);
+					p+= 2;
+					
+				/*	//teams cut in half when advancing a round
+					numRounds --;
+					numTeams = numTeams/2; */
+				}
 				
-				vLine.setStartX(0.0f);
-				vLine.setStartY(0.0f);
-				vLine.setEndX(0.0);
-				vLine.setEndY(30.00f);
-				
-				championArea.getChildren().addAll(championText, hLine, vLine);
-				championArea.setAlignment(Pos.BOTTOM_CENTER);
-				grid.add(championArea, 2, 0);
-				
-				VBox secondArea = new VBox();
-				Line hLine2 = new Line();
-				Line vLine2 = new Line();
-				Text secondText = new Text();
-				secondText.setText("Runner-Up: Team Name");
-				
-				
-				hLine2.setStartX(0.0f);
-				hLine2.setStartY(160.0f);
-				hLine2.setEndX(160.0f);
-				hLine2.setEndY(160.00f);
-				
-				vLine2.setStartX(0.0f);
-				vLine2.setStartY(0.0f);
-				vLine2.setEndX(0.0);
-				vLine2.setEndY(30.00f);
-				
-				secondArea.getChildren().addAll(vLine2, hLine2, secondText);
-				secondArea.setAlignment(Pos.TOP_CENTER);
-				grid.add(secondArea, 2, 2);
-				
-				submitBtn1.setOnAction(new EventHandler<ActionEvent>() { 
-									
+				if (numTeams == 2) {
+
+					Button submitBtn1 = new Button(); 
+					submitBtn1.setText("Submit");
+
+					//winner of left side
+					Team teamX = new Team(challengeArray[0].getTeam1().getName());
+
+					VBox leftWinner = new VBox();
+					leftWinner.getChildren().addAll(teamX.text, teamX.textField);
+
+					//winner of right side 
+					Team teamY = new Team(challengeArray[0].getTeam2().getName());
+
+					VBox rightWinner = new VBox();
+					rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+
+
+					//middle championship box
+					VBox submitBtnBox = new VBox();
+					submitBtnBox.getChildren().addAll(new Text(""), submitBtn1);
+					HBox championship = new HBox(); 
+					championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
+					grid.add(championship, 2, 1);
+
+					//champion and runner up areas - mostly lines 
+					VBox championArea = new VBox();
+					Line hLine = new Line();
+					Line vLine = new Line();
+					Text championText = new Text();
+					championText.setText("Champion: Team Name");
+
+
+					hLine.setStartX(0.0f);
+					hLine.setStartY(160.0f);
+					hLine.setEndX(160.0f);
+					hLine.setEndY(160.00f);
+
+					vLine.setStartX(0.0f);
+					vLine.setStartY(0.0f);
+					vLine.setEndX(0.0);
+					vLine.setEndY(30.00f);
+
+					championArea.getChildren().addAll(championText, hLine, vLine);
+					championArea.setAlignment(Pos.BOTTOM_CENTER);
+					grid.add(championArea, 2, 0);
+
+					VBox secondArea = new VBox();
+					Line hLine2 = new Line();
+					Line vLine2 = new Line();
+					Text secondText = new Text();
+					secondText.setText("Runner-Up: Team Name");
+
+
+					hLine2.setStartX(0.0f);
+					hLine2.setStartY(160.0f);
+					hLine2.setEndX(160.0f);
+					hLine2.setEndY(160.00f);
+
+					vLine2.setStartX(0.0f);
+					vLine2.setStartY(0.0f);
+					vLine2.setEndX(0.0);
+					vLine2.setEndY(30.00f);
+
+					secondArea.getChildren().addAll(vLine2, hLine2, secondText);
+					secondArea.setAlignment(Pos.TOP_CENTER);
+					grid.add(secondArea, 2, 2);
+
+					submitBtn1.setOnAction(new EventHandler<ActionEvent>() { 
+
 						public void handle(ActionEvent event)  {
 							if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
 								championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
@@ -280,374 +300,374 @@ public class Main extends Application {
 								secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
 							}
 						}
-				});
-			}
-			
-			
-			else if (numTeams == 4) { 
-				
-				Button submitBtn2 = new Button(); 
-				submitBtn2.setText("Submit");
-				
-				Button finalBtn = new Button(); 
-				finalBtn.setText("Load Final Matchup!");
-				
-				
-				grid.add(challengeArray[0].challengeBox, 0, 1);
-				grid.add(challengeArray[1].challengeBox, 2, 1);
-			
-				//winner of left side
-				Team teamX = new Team("");
-				
-				VBox leftWinner = new VBox();
-				leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-				
-				//winner of right side 
-				Team teamY = new Team("");
-				
-				VBox rightWinner = new VBox();
-				rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-				
-				
-				//middle championship box
-				VBox submitBtnBox = new VBox();
-				submitBtnBox.getChildren().addAll(new Text(""), submitBtn2, finalBtn);
-				HBox championship = new HBox(); 
-				championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
-				grid.add(championship, 1, 1);
-				
-				//champion and runner up areas - mostly lines 
-				VBox championArea = new VBox();
-				Line hLine = new Line();
-				Line vLine = new Line();
-				Text championText = new Text();
-				championText.setText("Champion: Team Name");
-				
-				
-				hLine.setStartX(0.0f);
-				hLine.setStartY(160.0f);
-				hLine.setEndX(160.0f);
-				hLine.setEndY(160.00f);
-				
-				vLine.setStartX(0.0f);
-				vLine.setStartY(0.0f);
-				vLine.setEndX(0.0);
-				vLine.setEndY(30.00f);
-				
-				championArea.getChildren().addAll(championText, hLine, vLine);
-				championArea.setAlignment(Pos.BOTTOM_CENTER);
-				grid.add(championArea, 1, 0);
-				
-				VBox secondArea = new VBox();
-				Line hLine2 = new Line();
-				Line vLine2 = new Line();
-				Text secondText = new Text();
-				secondText.setText("Runner-Up: Team Name");
-				
-				
-				hLine2.setStartX(0.0f);
-				hLine2.setStartY(160.0f);
-				hLine2.setEndX(160.0f);
-				hLine2.setEndY(160.00f);
-				
-				vLine2.setStartX(0.0f);
-				vLine2.setStartY(0.0f);
-				vLine2.setEndX(0.0);
-				vLine2.setEndY(30.00f);
-				
-				secondArea.getChildren().addAll(vLine2, hLine2, secondText);
-				secondArea.setAlignment(Pos.TOP_CENTER);
-				grid.add(secondArea, 1, 2);
-				
-				finalBtn.setOnAction(new EventHandler<ActionEvent>() { 
-					
-					public void handle(ActionEvent event) {
-						grid.getChildren().remove(championship);
-						Team teamX = new Team(challengeArray[0].computeWinner().getName());
-						
-						VBox leftWinner = new VBox();
-						leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-						
-						//winner of right side 
-						Team teamY = new Team(challengeArray[1].computeWinner().getName());
-						
-						VBox rightWinner = new VBox();
-						rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-						
-						
-						//middle championship box
-						VBox submitBtnBox = new VBox();
-						submitBtnBox.getChildren().addAll(new Text(""), submitBtn2);
-						HBox championship = new HBox(); 
-						championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
-						grid.add(championship, 1, 1);
-						challengeArray[0].setTeam1(teamX);
-						challengeArray[0].setTeam2(teamY);
-					}
-				});
-			
-				
-				submitBtn2.setOnAction(new EventHandler<ActionEvent>() { 
-					
-					public void handle(ActionEvent event)  {
-						if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
-							championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
-							secondText.setText("Runner Up: " + challengeArray[0].getTeam2().getName());
+					});
+				}
+
+
+				else if (numTeams == 4) { 
+
+					Button submitBtn2 = new Button(); 
+					submitBtn2.setText("Submit");
+
+					Button finalBtn = new Button(); 
+					finalBtn.setText("Load Final Matchup!");
+
+
+					grid.add(challengeArray[0].challengeBox, 0, 1);
+					grid.add(challengeArray[1].challengeBox, 2, 1);
+
+					//winner of left side
+					Team teamX = new Team("");
+
+					VBox leftWinner = new VBox();
+					leftWinner.getChildren().addAll(teamX.text, teamX.textField);
+
+					//winner of right side 
+					Team teamY = new Team("");
+
+					VBox rightWinner = new VBox();
+					rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+
+
+					//middle championship box
+					VBox submitBtnBox = new VBox();
+					submitBtnBox.getChildren().addAll(new Text(""), submitBtn2, finalBtn);
+					HBox championship = new HBox(); 
+					championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
+					grid.add(championship, 1, 1);
+
+					//champion and runner up areas - mostly lines 
+					VBox championArea = new VBox();
+					Line hLine = new Line();
+					Line vLine = new Line();
+					Text championText = new Text();
+					championText.setText("Champion: Team Name");
+
+
+					hLine.setStartX(0.0f);
+					hLine.setStartY(160.0f);
+					hLine.setEndX(160.0f);
+					hLine.setEndY(160.00f);
+
+					vLine.setStartX(0.0f);
+					vLine.setStartY(0.0f);
+					vLine.setEndX(0.0);
+					vLine.setEndY(30.00f);
+
+					championArea.getChildren().addAll(championText, hLine, vLine);
+					championArea.setAlignment(Pos.BOTTOM_CENTER);
+					grid.add(championArea, 1, 0);
+
+					VBox secondArea = new VBox();
+					Line hLine2 = new Line();
+					Line vLine2 = new Line();
+					Text secondText = new Text();
+					secondText.setText("Runner-Up: Team Name");
+
+
+					hLine2.setStartX(0.0f);
+					hLine2.setStartY(160.0f);
+					hLine2.setEndX(160.0f);
+					hLine2.setEndY(160.00f);
+
+					vLine2.setStartX(0.0f);
+					vLine2.setStartY(0.0f);
+					vLine2.setEndX(0.0);
+					vLine2.setEndY(30.00f);
+
+					secondArea.getChildren().addAll(vLine2, hLine2, secondText);
+					secondArea.setAlignment(Pos.TOP_CENTER);
+					grid.add(secondArea, 1, 2);
+
+					finalBtn.setOnAction(new EventHandler<ActionEvent>() { 
+
+						public void handle(ActionEvent event) {
+							grid.getChildren().remove(championship);
+							Team teamX = new Team(challengeArray[0].computeWinner().getName());
+
+							VBox leftWinner = new VBox();
+							leftWinner.getChildren().addAll(teamX.text, teamX.textField);
+
+							//winner of right side 
+							Team teamY = new Team(challengeArray[1].computeWinner().getName());
+
+							VBox rightWinner = new VBox();
+							rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+
+
+							//middle championship box
+							VBox submitBtnBox = new VBox();
+							submitBtnBox.getChildren().addAll(new Text(""), submitBtn2);
+							HBox championship = new HBox(); 
+							championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
+							grid.add(championship, 1, 1);
+							challengeArray[0].setTeam1(teamX);
+							challengeArray[0].setTeam2(teamY);
+						}
+					});
+
+
+					submitBtn2.setOnAction(new EventHandler<ActionEvent>() { 
+
+						public void handle(ActionEvent event)  {
+							if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
+								championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
+								secondText.setText("Runner Up: " + challengeArray[0].getTeam2().getName());
+							}
+							else { 
+								championText.setText("Champion: " + challengeArray[0].getTeam2().getName());
+								secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
+							}
+						}
+					});	
+
+
+				}
+
+
+				else {
+					Button submitBtn3 = new Button(); 
+					submitBtn3.setText("Submit");
+
+					Button finalBtn2 = new Button(); 
+					finalBtn2.setText("Load Final Matchup!");
+
+
+					ArrayList<ArrayList<Challenge>> innerChallengesLeft = new ArrayList<ArrayList<Challenge>>();
+
+					//Left Hand Side of Grid
+					Challenge[] leftEmpty = new Challenge[9];
+
+					for (int g = 0; g < 9; g++) {
+						if (g % 2 == 0) { 
+							leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left", true);
 						}
 						else { 
-							championText.setText("Champion: " + challengeArray[0].getTeam2().getName());
-							secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
+							leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left", false);
 						}
-					}
-				});	
-			
-			
-			}
-			
-			
-			else {
-				Button submitBtn3 = new Button(); 
-				submitBtn3.setText("Submit");
-				
-				Button finalBtn2 = new Button(); 
-				finalBtn2.setText("Load Final Matchup!");
-				
-				
-				ArrayList<ArrayList<Challenge>> innerChallengesLeft = new ArrayList<ArrayList<Challenge>>();
-				
-				//Left Hand Side of Grid
-				Challenge[] leftEmpty = new Challenge[9];
 
-				for (int g = 0; g < 9; g++) {
-					if (g % 2 == 0) { 
-						leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left", true);
 					}
-					else { 
-						leftEmpty[g] = new Challenge(new Team(""), new Team(""), "left", false);
-					}
-					
-				}
-				
-				
 
-				for(int j = 0; j < numTeams/4; j++) {
-					grid.add(challengeArray[j].challengeBox, 0, 2*j);		
-				}
-				int inc = 0;
-				for (int j = 0; j < numTeams/8; j++) {
-						
-					ArrayList<Challenge> inner = new ArrayList<Challenge>();
-					for(int k = 0; k < numTeams/8-j; k++) {
-						grid.add(leftEmpty[inc].challengeBox, j+1, 4*k + (2*j+1));
-						inner.add(leftEmpty[inc]);
-						inc++;
-					}
-					innerChallengesLeft.add(inner);
 
-				}
-				
-				int innerCounter = 0;
-				for (int k = 0; k < challengeArray.length/2; k+=2) { 
-					challengeArray[k].child = innerChallengesLeft.get(0).get(innerCounter);
-					challengeArray[k + 1].child = innerChallengesLeft.get(0).get(innerCounter);
-					innerCounter += 1;
-				}
-				
-				
-				for (int k = 0; k < innerChallengesLeft.size(); k++) { 
-					innerCounter = 0;
-					for(int j = 0; j < innerChallengesLeft.get(k).size() - 1; j+=2) { 
-						innerChallengesLeft.get(k).get(j).child = innerChallengesLeft.get(j+1).get(innerCounter);
-						innerChallengesLeft.get(k).get(j+1).child = innerChallengesLeft.get(j+1).get(innerCounter);
+
+					for(int j = 0; j < numTeams/4; j++) {
+						grid.add(challengeArray[j].challengeBox, 0, 2*j);		
+					}
+					int inc = 0;
+					for (int j = 0; j < numTeams/8; j++) {
+
+						ArrayList<Challenge> inner = new ArrayList<Challenge>();
+						for(int k = 0; k < numTeams/8-j; k++) {
+							grid.add(leftEmpty[inc].challengeBox, j+1, 4*k + (2*j+1));
+							inner.add(leftEmpty[inc]);
+							inc++;
+						}
+						innerChallengesLeft.add(inner);
+
+					}
+
+					int innerCounter = 0;
+					for (int k = 0; k < challengeArray.length/2; k+=2) { 
+						challengeArray[k].child = innerChallengesLeft.get(0).get(innerCounter);
+						challengeArray[k + 1].child = innerChallengesLeft.get(0).get(innerCounter);
 						innerCounter += 1;
 					}
-				}
-				
-				
-				
-				
-				ArrayList<ArrayList<Challenge>> innerChallengesRight = new ArrayList<ArrayList<Challenge>>();
-				
-				Challenge[] rightEmpty = new Challenge[9];
-
-				for (int g = 0; g < 9; g++) {
-					if (g % 2 == 0) { 
-						rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right", false);
-					}
-					else { 
-						rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right", true);
-					}
-					
-				}
 
 
-				//Right Hand Side of Grid
-				int z = 2; 
-				if (numTeams == 8) { 
-					z = 0;
-				}
-
-				for(int j = numTeams/4; j < numTeams/2; j++) {
-					grid.add(challengeArray[j].challengeBox, numTeams/2 - z, 2*j-2*numTeams/4);		
-				}
-				int inc2 = 0;
-				for (int j = 0; j < numTeams/8; j++) {
-					
-					ArrayList<Challenge> inner = new ArrayList<Challenge>();
-					for(int k = 0; k < numTeams/8-j; k++) {
-						System.out.println("(" +  (numTeams/4+1-j) + "," +  (4*k + (2*j+1)) + ")");
-						grid.add(rightEmpty[numTeams/8 + inc2 + 1].challengeBox, numTeams/4+1-j, 4*k + (2*j+1));
-						inner.add(rightEmpty[numTeams/8 + inc2 + 1]);
-						inc2++;
-					}
-					innerChallengesRight.add(inner);
-
-				}
-				
-				innerCounter = 0;
-				for (int k = challengeArray.length/2; k < challengeArray.length; k+=2) { 
-					challengeArray[k].child = innerChallengesRight.get(0).get(innerCounter);
-					challengeArray[k + 1].child = innerChallengesRight.get(0).get(innerCounter);
-					innerCounter += 1;
-				}
-				
-				for (int k = 0; k < innerChallengesRight.size(); k ++) { 
-					innerCounter = 0;
-					for(int j = 0; j < innerChallengesRight.get(k).size() - 1; j+=2) { 
-						innerChallengesRight.get(k).get(j).child = innerChallengesRight.get(j+1).get(innerCounter);
-						innerChallengesRight.get(k).get(j+1).child = innerChallengesRight.get(j+1).get(innerCounter);
-						innerCounter += 1;
-					}
-				}
-
-				//winner of left side
-				Team teamX = new Team("");
-
-				VBox leftWinner = new VBox();
-				leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-
-				//winner of right side 
-				Team teamY = new Team("");
-
-				VBox rightWinner = new VBox();
-				rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-
-
-				//middle championship box
-				VBox submitBtnBox = new VBox();
-				submitBtnBox.getChildren().addAll(new Text(""), submitBtn3, finalBtn2);
-				HBox championship = new HBox(); 
-				championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
-				
-
-				//champion and runner up areas - mostly lines 
-				VBox championArea = new VBox();
-				Line hLine = new Line();
-				Line vLine = new Line();
-				Text championText = new Text();
-				championText.setText("Champion: Team Name");
-
-
-				hLine.setStartX(0.0f);
-				hLine.setStartY(160.0f);
-				hLine.setEndX(160.0f);
-				hLine.setEndY(160.00f);
-
-				vLine.setStartX(0.0f);
-				vLine.setStartY(0.0f);
-				vLine.setEndX(0.0);
-				vLine.setEndY(30.00f);
-
-				championArea.getChildren().addAll(championText, hLine, vLine);
-				championArea.setAlignment(Pos.BOTTOM_CENTER);
-				
-
-				VBox secondArea = new VBox();
-				Line hLine2 = new Line();
-				Line vLine2 = new Line();
-				Text secondText = new Text();
-				secondText.setText("Runner-Up: Team Name");
-
-
-				hLine2.setStartX(0.0f);
-				hLine2.setStartY(160.0f);
-				hLine2.setEndX(160.0f);
-				hLine2.setEndY(160.00f);
-
-				vLine2.setStartX(0.0f);
-				vLine2.setStartY(0.0f);
-				vLine2.setEndX(0.0);
-				vLine2.setEndY(30.00f);
-
-				secondArea.getChildren().addAll(vLine2, hLine2, secondText);
-				secondArea.setAlignment(Pos.TOP_CENTER);
-				
-				
-				VBox centerBox = new VBox();
-				centerBox.getChildren().addAll(championship);
-				
-				int w = 0; 
-				if(numTeams == 8) { 
-					w = 1;
-				}
-				
-				
-				grid.add(centerBox, numTeams/4 - 1 + w, numTeams/4 -1);
-				grid.add(championArea, numTeams/4 - 1 + w, numTeams/4 - 2);
-				grid.add(secondArea, numTeams/4 - 1 + w, numTeams/4);
-				
-				
-				finalBtn2.setOnAction(new EventHandler<ActionEvent>() { 
-					
-					public void handle(ActionEvent event) {
-						int w = 0; 
-						if(numTeams == 8) { 
-							w = 1;
+					for (int k = 0; k < innerChallengesLeft.size(); k++) { 
+						innerCounter = 0;
+						for(int j = 0; j < innerChallengesLeft.get(k).size() - 1; j+=2) { 
+							innerChallengesLeft.get(k).get(j).child = innerChallengesLeft.get(j+1).get(innerCounter);
+							innerChallengesLeft.get(k).get(j+1).child = innerChallengesLeft.get(j+1).get(innerCounter);
+							innerCounter += 1;
 						}
-						grid.getChildren().remove(championship);
-						Team teamX = new Team(innerChallengesLeft.get(innerChallengesLeft.size() - 1).get(0).computeWinner().getName());
-						
-						VBox leftWinner = new VBox();
-						leftWinner.getChildren().addAll(teamX.text, teamX.textField);
-						
-						//winner of right side 
-						Team teamY = new Team(innerChallengesLeft.get(innerChallengesRight.size() - 1).get(0).computeWinner().getName());; //needs to be fix
-						
-						VBox rightWinner = new VBox();
-						rightWinner.getChildren().addAll(teamY.text, teamY.textField);
-						
-						
-						//middle championship box
-						VBox submitBtnBox = new VBox();
-						submitBtnBox.getChildren().addAll(new Text(""), submitBtn3);
-						HBox championship = new HBox(); 
-						championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
-						challengeArray[0].setTeam1(teamX);
-						challengeArray[0].setTeam2(teamY);
-						grid.add(championArea, numTeams/4 - 1 + w, numTeams/4 - 2);
-						
 					}
-				});
-				
-				
-			
-				
-				submitBtn3.setOnAction(new EventHandler<ActionEvent>() { 
-					
-					public void handle(ActionEvent event)  {
-						if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
-							championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
-							secondText.setText("Runner Up: " + challengeArray[0].getTeam2().getName());
+
+
+
+
+					ArrayList<ArrayList<Challenge>> innerChallengesRight = new ArrayList<ArrayList<Challenge>>();
+
+					Challenge[] rightEmpty = new Challenge[9];
+
+					for (int g = 0; g < 9; g++) {
+						if (g % 2 == 0) { 
+							rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right", false);
 						}
 						else { 
-							championText.setText("Champion: " + challengeArray[0].getTeam2().getName());
-							secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
+							rightEmpty[g] = new Challenge(new Team(""), new Team(""), "right", true);
+						}
+
+					}
+
+
+					//Right Hand Side of Grid
+					int z = 2; 
+					if (numTeams == 8) { 
+						z = 0;
+					}
+
+					for(int j = numTeams/4; j < numTeams/2; j++) {
+						grid.add(challengeArray[j].challengeBox, numTeams/2 - z, 2*j-2*numTeams/4);		
+					}
+					int inc2 = 0;
+					for (int j = 0; j < numTeams/8; j++) {
+
+						ArrayList<Challenge> inner = new ArrayList<Challenge>();
+						for(int k = 0; k < numTeams/8-j; k++) {
+							System.out.println("(" +  (numTeams/4+1-j) + "," +  (4*k + (2*j+1)) + ")");
+							grid.add(rightEmpty[numTeams/8 + inc2 + 1].challengeBox, numTeams/4+1-j, 4*k + (2*j+1));
+							inner.add(rightEmpty[numTeams/8 + inc2 + 1]);
+							inc2++;
+						}
+						innerChallengesRight.add(inner);
+
+					}
+
+					innerCounter = 0;
+					for (int k = challengeArray.length/2; k < challengeArray.length; k+=2) { 
+						challengeArray[k].child = innerChallengesRight.get(0).get(innerCounter);
+						challengeArray[k + 1].child = innerChallengesRight.get(0).get(innerCounter);
+						innerCounter += 1;
+					}
+
+					for (int k = 0; k < innerChallengesRight.size(); k ++) { 
+						innerCounter = 0;
+						for(int j = 0; j < innerChallengesRight.get(k).size() - 1; j+=2) { 
+							innerChallengesRight.get(k).get(j).child = innerChallengesRight.get(j+1).get(innerCounter);
+							innerChallengesRight.get(k).get(j+1).child = innerChallengesRight.get(j+1).get(innerCounter);
+							innerCounter += 1;
 						}
 					}
-				});
-			}
-			
 
+					//winner of left side
+					Team teamX = new Team("");
+
+					VBox leftWinner = new VBox();
+					leftWinner.getChildren().addAll(teamX.text, teamX.textField);
+
+					//winner of right side 
+					Team teamY = new Team("");
+
+					VBox rightWinner = new VBox();
+					rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+
+
+					//middle championship box
+					VBox submitBtnBox = new VBox();
+					submitBtnBox.getChildren().addAll(new Text(""), submitBtn3, finalBtn2);
+					HBox championship = new HBox(); 
+					championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
+
+
+					//champion and runner up areas - mostly lines 
+					VBox championArea = new VBox();
+					Line hLine = new Line();
+					Line vLine = new Line();
+					Text championText = new Text();
+					championText.setText("Champion: Team Name");
+
+
+					hLine.setStartX(0.0f);
+					hLine.setStartY(160.0f);
+					hLine.setEndX(160.0f);
+					hLine.setEndY(160.00f);
+
+					vLine.setStartX(0.0f);
+					vLine.setStartY(0.0f);
+					vLine.setEndX(0.0);
+					vLine.setEndY(30.00f);
+
+					championArea.getChildren().addAll(championText, hLine, vLine);
+					championArea.setAlignment(Pos.BOTTOM_CENTER);
+
+
+					VBox secondArea = new VBox();
+					Line hLine2 = new Line();
+					Line vLine2 = new Line();
+					Text secondText = new Text();
+					secondText.setText("Runner-Up: Team Name");
+
+
+					hLine2.setStartX(0.0f);
+					hLine2.setStartY(160.0f);
+					hLine2.setEndX(160.0f);
+					hLine2.setEndY(160.00f);
+
+					vLine2.setStartX(0.0f);
+					vLine2.setStartY(0.0f);
+					vLine2.setEndX(0.0);
+					vLine2.setEndY(30.00f);
+
+					secondArea.getChildren().addAll(vLine2, hLine2, secondText);
+					secondArea.setAlignment(Pos.TOP_CENTER);
+
+
+					VBox centerBox = new VBox();
+					centerBox.getChildren().addAll(championship);
+
+					int w = 0; 
+					if(numTeams == 8) { 
+						w = 1;
+					}
+
+
+					grid.add(centerBox, numTeams/4 - 1 + w, numTeams/4 -1);
+					grid.add(championArea, numTeams/4 - 1 + w, numTeams/4 - 2);
+					grid.add(secondArea, numTeams/4 - 1 + w, numTeams/4);
+
+
+					finalBtn2.setOnAction(new EventHandler<ActionEvent>() { 
+
+						public void handle(ActionEvent event) {
+							int w = 0; 
+							if(numTeams == 8) { 
+								w = 1;
+							}
+							grid.getChildren().remove(championship);
+							Team teamX = new Team(innerChallengesLeft.get(innerChallengesLeft.size() - 1).get(0).computeWinner().getName());
+
+							VBox leftWinner = new VBox();
+							leftWinner.getChildren().addAll(teamX.text, teamX.textField);
+
+							//winner of right side 
+							Team teamY = new Team(innerChallengesLeft.get(innerChallengesRight.size() - 1).get(0).computeWinner().getName());; //needs to be fix
+
+							VBox rightWinner = new VBox();
+							rightWinner.getChildren().addAll(teamY.text, teamY.textField);
+
+
+							//middle championship box
+							VBox submitBtnBox = new VBox();
+							submitBtnBox.getChildren().addAll(new Text(""), submitBtn3);
+							HBox championship = new HBox(); 
+							championship.getChildren().addAll(leftWinner, submitBtnBox, rightWinner);
+							challengeArray[0].setTeam1(teamX);
+							challengeArray[0].setTeam2(teamY);
+							grid.add(championArea, numTeams/4 - 1 + w, numTeams/4 - 2);
+
+						}
+					});
+
+
+
+
+					submitBtn3.setOnAction(new EventHandler<ActionEvent>() { 
+
+						public void handle(ActionEvent event)  {
+							if (challengeArray[0].getTeam1().getScore() > challengeArray[0].getTeam2().getScore()) { 
+								championText.setText("Champion: " + challengeArray[0].getTeam1().getName());
+								secondText.setText("Runner Up: " + challengeArray[0].getTeam2().getName());
+							}
+							else { 
+								championText.setText("Champion: " + challengeArray[0].getTeam2().getName());
+								secondText.setText("Runner Up: " + challengeArray[0].getTeam1().getName());
+							}
+						}
+					});
+				}
+			
+			}
 			grid.setStyle("-fx-background-color: #F8BFD1;");
 			
 			
